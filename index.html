@@ -700,7 +700,7 @@ class Component extends DCLogic {
   componentWillUnmount() { if (this.io) this.io.disconnect(); if (this.mo) this.mo.disconnect(); }
   fixVideos() {
     document.querySelectorAll('video').forEach(v => {
-      v.muted = true; v.defaultMuted = true;
+      v.muted = true; v.defaultMuted = true; v.loop = true;
       if (v.paused) v.play().catch(() => {});
     });
   }
