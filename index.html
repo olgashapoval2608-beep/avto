@@ -55,7 +55,7 @@
     <main data-screen-label="Homepage" style="animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
 
       <section style="position:relative;height:88vh;min-height:640px;overflow:hidden;display:flex;align-items:flex-end">
-        <video src="assets/hero-video.mp4" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92;animation:fadeIn 2s ease"></video>
+        <video src="assets/hero-video.mp4" autoplay muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92;animation:fadeIn 2s ease"></video>
         <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,13,12,.85) 0%,rgba(11,13,12,.4) 45%,rgba(11,13,12,.1) 100%)"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,12,.5) 0%,rgba(11,13,12,0) 30%,rgba(11,13,12,.35) 75%,#0B0D0C 100%)"></div>
 
@@ -700,7 +700,7 @@ class Component extends DCLogic {
   componentWillUnmount() { if (this.io) this.io.disconnect(); if (this.mo) this.mo.disconnect(); }
   fixVideos() {
     document.querySelectorAll('video').forEach(v => {
-      v.muted = true; v.defaultMuted = true; v.loop = true;
+      v.muted = true; v.defaultMuted = true;
       if (v.paused) v.play().catch(() => {});
     });
   }
