@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#060807}
+    *{box-sizing:border-box}
+    @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.35}}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:#060807;color:#F2F5F3;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;padding:56px">
+
+  <!-- COVER -->
+  <section id="cover" style="max-width:1600px;margin:0 auto 64px">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:14px">
+      <span style="font-weight:800;font-size:30px;letter-spacing:6px">SOVBEZ</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:4px;color:#4CD97B">AUTO IMPORT</span>
+    </div>
+    <h1 style="font-size:44px;font-weight:800;letter-spacing:-1px;margin:0 0 10px;max-width:820px">Дизайн-система та мобільні екрани</h1>
+    <p style="font-size:16px;color:#98A29C;max-width:640px;line-height:1.6;margin:0 0 18px">UX/UI кейс ecommerce-платформи імпорту авто з США. Токени, компоненти та стани — готові до передачі розробнику. Живий прототип: <a href="index.html" style="color:#4CD97B">SOVBEZ Prototype</a>.</p>
+    <div style="display:flex;gap:10px">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#4CD97B;border:1px solid rgba(76,217,123,.3);border-radius:20px;padding:7px 14px">DESKTOP 1280</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#4CD97B;border:1px solid rgba(76,217,123,.3);border-radius:20px;padding:7px 14px">MOBILE 390</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#4CD97B;border:1px solid rgba(76,217,123,.3);border-radius:20px;padding:7px 14px">DARK ONLY</span>
+    </div>
+  </section>
+
+  <!-- ============ DESIGN SYSTEM ============ -->
+  <section data-screen-label="Design system" style="max-width:1600px;margin:0 auto 72px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+
+    <!-- COLORS -->
+    <div style="background:#0E1110;border:1px solid #1E2421;border-radius:20px;padding:30px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;margin-bottom:22px">01 · КОЛЬОРИ</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <sc-for list="{{ colors }}" as="c" hint-placeholder-count="8">
+          <div style="border:1px solid #1E2421;border-radius:12px;overflow:hidden">
+            <div style="height:56px;background: {{ c.hex }}"></div>
+            <div style="padding:11px 14px;background:#0B0D0C">
+              <div style="font-size:13px;font-weight:700">{{ c.name }}</div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C665F">{{ c.hex }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#4CD97B">{{ c.token }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- TYPE -->
+    <div style="background:#0E1110;border:1px solid #1E2421;border-radius:20px;padding:30px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;margin-bottom:22px">02 · ТИПОГРАФІКА</div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="border-bottom:1px solid #1E2421;padding-bottom:16px">
+          <div style="font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.05">Manrope 800</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C665F;margin-top:8px">H1 · 58/44px · -1.5px · headings, ціни</div>
+        </div>
+        <div style="border-bottom:1px solid #1E2421;padding-bottom:16px">
+          <div style="font-size:26px;font-weight:800;letter-spacing:-.5px">Manrope 800 — заголовки секцій</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C665F;margin-top:8px">H2 · 28px · -0.5px</div>
+        </div>
+        <div style="border-bottom:1px solid #1E2421;padding-bottom:16px">
+          <div style="font-size:15px;font-weight:400;line-height:1.6;color:#C9D2CC">Manrope 400 — основний текст. Підбір, перевірка, доставка та розмитнення: ви бачите кожен етап і кожен долар у ціні.</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C665F;margin-top:8px">Body · 14–17px · lh 1.6</div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;color:#4CD97B">JETBRAINS MONO · ЛЕЙБЛИ, VIN, СПЕЦИФІКАЦІЇ</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C665F;margin-top:8px">Label · 10–12px · +1.5–2.5px tracking · uppercase — технічна «мова довіри»</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTTONS & STATES -->
+    <div style="background:#0E1110;border:1px solid #1E2421;border-radius:20px;padding:30px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;margin-bottom:22px">03 · КНОПКИ ТА СТАНИ</div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <button style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:13px 24px;border-radius:10px">Primary</button>
+          <button style="border:none;cursor:default;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:13px 24px;border-radius:10px;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(76,217,123,.5)">Hover</button>
+          <button style="border:none;cursor:default;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:13px 24px;border-radius:10px;opacity:.45">Disabled</button>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C665F">PRIMARY / CTA</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <button style="border:1px solid #242927;background:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:#F2F5F3;padding:12px 24px;border-radius:10px">Secondary</button>
+          <button style="border:1px solid rgba(76,217,123,.5);background:none;cursor:default;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:#4CD97B;padding:12px 24px;border-radius:10px">Hover</button>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C665F">SECONDARY / OUTLINE</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button style="border:1px solid #242927;background:transparent;cursor:pointer;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;color:#98A29C;padding:7px 13px;border-radius:20px">Фільтр</button>
+          <button style="border:1px solid rgba(76,217,123,.5);background:rgba(76,217,123,.14);cursor:pointer;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;color:#4CD97B;padding:7px 13px;border-radius:20px">Активний</button>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C665F">CHIP / FILTER TOGGLE</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;font-weight:600;padding:5px 10px;border-radius:6px;background:rgba(76,217,123,.16);color:#4CD97B">CERTIFIED</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;font-weight:600;padding:5px 10px;border-radius:6px;background:rgba(125,184,255,.14);color:#7DB8FF">NEW ARRIVAL</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;font-weight:600;padding:5px 10px;border-radius:6px;background:rgba(255,176,76,.16);color:#FFB04C">PRICE DROP</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:#98A29C"><span style="width:7px;height:7px;border-radius:50%;background:#FFB04C"></span>В ДОРОЗІ</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:#98A29C"><span style="width:7px;height:7px;border-radius:50%;background:#4CD97B"></span>В УКРАЇНІ</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <input placeholder="Input / default" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:11px 13px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:13.5px;width:170px">
+          <input value="Input / focus" readonly style="background:#0B0D0C;border:1px solid rgba(76,217,123,.5);border-radius:10px;padding:11px 13px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:13.5px;width:170px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C665F">INPUTS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD ANATOMY -->
+    <div style="background:#0E1110;border:1px solid #1E2421;border-radius:20px;padding:30px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;margin-bottom:22px">04 · КАРТКА АВТО (КОМПОНЕНТ)</div>
+      <div style="display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start">
+        <dc-import name="CarCard" hint-size="340px,330px"></dc-import>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <sc-for list="{{ anatomy }}" as="a" hint-placeholder-count="6">
+            <div style="display:flex;gap:12px;align-items:baseline">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#4CD97B;flex-shrink:0;width:20px">{{ a.n }}</span>
+              <div>
+                <span style="font-size:13.5px;font-weight:700">{{ a.t }}</span>
+                <span style="font-size:13px;color:#98A29C"> — {{ a.d }}</span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C665F;line-height:1.7">radius 16 · border #242927 → accent on hover<br>hover: translateY(-6px) + shadow · 350ms cubic-bezier(.2,.7,.2,1)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPACING / GRID -->
+    <div style="background:#0E1110;border:1px solid #1E2421;border-radius:20px;padding:30px;grid-column:1 / -1">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;margin-bottom:22px">05 · СІТКА ТА ВІДСТУПИ</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:10px">Desktop · контейнер 1280</div>
+          <div style="font-size:13px;color:#98A29C;line-height:1.7">12 колонок · gutter 18px · поля 32px.<br>Каталог: сайдбар 264px + грід 3 картки.</div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:10px">Mobile · 390</div>
+          <div style="font-size:13px;color:#98A29C;line-height:1.7">1 колонка · поля 20px · картки на всю ширину.<br>Хіт-таргети ≥ 44px, нижня таб-навігація.</div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:10px">Шкала відступів</div>
+          <div style="display:flex;align-items:flex-end;gap:8px;margin-top:6px">
+            <sc-for list="{{ spacings }}" as="sp" hint-placeholder-count="6">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="width:26px;background:rgba(76,217,123,.35);border:1px solid rgba(76,217,123,.5);border-radius:4px;height: {{ sp.h }}"></div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#5C665F">{{ sp.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOBILE SCREENS ============ -->
+  <section style="max-width:1600px;margin:0 auto">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;margin-bottom:22px">06 · MOBILE 390 · HOMEPAGE + PRODUCT DETAIL</div>
+    <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- MOBILE HOME -->
+      <div data-screen-label="Mobile Homepage" style="width:390px;background:#0B0D0C;border:1px solid #1E2421;border-radius:36px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.9)">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#98A29C">
+          <span>9:41</span>
+          <span style="display:flex;gap:5px;align-items:center"><span style="width:16px;height:9px;border:1px solid #5C665F;border-radius:2px;display:inline-block;position:relative"><span style="position:absolute;inset:1px;right:5px;background:#4CD97B;border-radius:1px"></span></span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 20px 14px">
+          <div style="display:flex;align-items:baseline;gap:7px">
+            <span style="font-weight:800;font-size:16px;letter-spacing:3px">SOVBEZ</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:#4CD97B">AUTO IMPORT</span>
+          </div>
+          <div style="width:36px;height:36px;border-radius:10px;border:1px solid #242927;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3.5px">
+            <span style="width:15px;height:1.6px;background:#F2F5F3"></span><span style="width:15px;height:1.6px;background:#F2F5F3"></span><span style="width:15px;height:1.6px;background:#F2F5F3"></span>
+          </div>
+        </div>
+        <div style="position:relative;height:300px;overflow:hidden">
+          <img src="assets/taycan-clean.png" alt="Porsche Taycan" style="width:100%;height:100%;object-fit:cover;display:block;opacity:.9">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,12,.35),rgba(11,13,12,0) 35%,rgba(11,13,12,.85) 85%,#0B0D0C)"></div>
+          <div style="position:absolute;left:20px;right:20px;bottom:16px">
+            <div style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:#4CD97B;border:1px solid rgba(76,217,123,.3);border-radius:14px;padding:5px 11px;background:rgba(11,13,12,.6);margin-bottom:10px">
+              <span style="width:5px;height:5px;border-radius:50%;background:#4CD97B;animation:dotPulse 2s infinite"></span>АВТО З США · ПІД КЛЮЧ
+            </div>
+            <div style="font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1.1">Чесно про авто —<br>без <span style="color:#4CD97B">«казок»</span></div>
+          </div>
+        </div>
+        <div style="padding:14px 20px 0">
+          <div style="background:#121514;border:1px solid #242927;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:9px">
+            <input placeholder="Марка або модель" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:13px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px;width:100%">
+            <div style="display:flex;gap:9px">
+              <div style="flex:1;background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:13px;font-size:13px;color:#98A29C;display:flex;justify-content:space-between">Рік від <span style="color:#F2F5F3">2020 ▾</span></div>
+              <div style="flex:1;background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:13px;font-size:13px;color:#98A29C;display:flex;justify-content:space-between">До <span style="color:#F2F5F3">$20k ▾</span></div>
+            </div>
+            <div style="border:none;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:14px;border-radius:11px;text-align:center">Знайти авто</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px;overflow:hidden">
+            <span style="border:1px solid rgba(76,217,123,.5);background:rgba(76,217,123,.14);font-size:12.5px;font-weight:600;color:#4CD97B;padding:9px 15px;border-radius:20px;white-space:nowrap">Всі</span>
+            <span style="border:1px solid #242927;font-size:12.5px;font-weight:600;color:#98A29C;padding:9px 15px;border-radius:20px;white-space:nowrap">Седани</span>
+            <span style="border:1px solid #242927;font-size:12.5px;font-weight:600;color:#98A29C;padding:9px 15px;border-radius:20px;white-space:nowrap">SUV</span>
+            <span style="border:1px solid #242927;font-size:12.5px;font-weight:600;color:#98A29C;padding:9px 15px;border-radius:20px;white-space:nowrap">Електро</span>
+          </div>
+          <div style="margin-top:18px;background:#121514;border:1px solid #242927;border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#121614 0 14px,#161B18 14px 28px)">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2px;color:#5C665F">PHOTO · MAZDA 3</span>
+              <span style="position:absolute;top:10px;left:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;font-weight:600;padding:4px 9px;border-radius:6px;background:rgba(125,184,255,.14);color:#7DB8FF">NEW ARRIVAL</span>
+            </div>
+            <div style="padding:14px">
+              <div style="display:flex;justify-content:space-between;gap:8px">
+                <span style="font-size:15px;font-weight:700">Mazda 3 Preferred</span>
+                <span style="font-size:15px;font-weight:800;color:#4CD97B">$13,999</span>
+              </div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#98A29C;margin-top:5px">2023 · 10 тис. миль · Бензин</div>
+              <div style="display:flex;align-items:center;gap:7px;margin-top:11px;padding-top:11px;border-top:1px solid #1C211E">
+                <span style="width:6px;height:6px;border-radius:50%;background:#FFB04C"></span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:1px;color:#98A29C">В ДОРОЗІ · ПОРТ КЛАЙПЕДА</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-around;border-top:1px solid #1C211E;margin-top:18px;padding:12px 10px 26px;background:rgba(11,13,12,.9)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px"><span style="width:20px;height:20px;border-radius:6px;background:rgba(76,217,123,.2);border:1px solid #4CD97B"></span><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#4CD97B">ГОЛОВНА</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px"><span style="width:20px;height:20px;border-radius:6px;border:1px solid #3A443E"></span><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#5C665F">КАТАЛОГ</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px"><span style="width:20px;height:20px;border-radius:6px;border:1px solid #3A443E"></span><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#5C665F">ЗБЕРЕЖЕНІ</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px"><span style="width:20px;height:20px;border-radius:6px;border:1px solid #3A443E"></span><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#5C665F">КАБІНЕТ</span></div>
+        </div>
+      </div>
+
+      <!-- MOBILE DETAIL -->
+      <div data-screen-label="Mobile Product detail" style="width:390px;background:#0B0D0C;border:1px solid #1E2421;border-radius:36px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.9)">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#98A29C">
+          <span>9:41</span>
+          <span style="width:16px;height:9px;border:1px solid #5C665F;border-radius:2px;display:inline-block;position:relative"><span style="position:absolute;inset:1px;right:5px;background:#4CD97B;border-radius:1px"></span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 20px 12px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#5C665F">← КАТАЛОГ</span>
+          <svg width="13" height="16" viewBox="0 0 13 16"><path d="M1 1 H12 V15 L6.5 10.5 L1 15 Z" fill="#4CD97B" stroke="#4CD97B" stroke-width="1.4"></path></svg>
+        </div>
+        <div style="position:relative;height:240px">
+          <img src="assets/taycan-clean.png" alt="Porsche Taycan" style="width:100%;height:100%;object-fit:cover;display:block">
+          <span style="position:absolute;top:12px;left:12px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;font-weight:600;padding:4px 9px;border-radius:6px;background:rgba(76,217,123,.2);color:#4CD97B;backdrop-filter:blur(8px)">CERTIFIED</span>
+          <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:5px">
+            <span style="width:16px;height:4px;border-radius:3px;background:#4CD97B"></span>
+            <span style="width:4px;height:4px;border-radius:3px;background:rgba(255,255,255,.4)"></span>
+            <span style="width:4px;height:4px;border-radius:3px;background:rgba(255,255,255,.4)"></span>
+            <span style="width:4px;height:4px;border-radius:3px;background:rgba(255,255,255,.4)"></span>
+          </div>
+        </div>
+        <div style="padding:18px 20px 0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#4CD97B;animation:dotPulse 2s infinite"></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:1.5px;color:#98A29C">В УКРАЇНІ · КИЇВ, ШОУРУМ</span>
+          </div>
+          <div style="font-size:21px;font-weight:800;letter-spacing:-.3px">Porsche Taycan Sport Turismo</div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+            <span style="font-size:27px;font-weight:800;color:#4CD97B">$61,900</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:#5C665F">ПІД КЛЮЧ</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px">
+            <div style="background:#121514;border:1px solid #1C211E;border-radius:10px;padding:10px"><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;color:#5C665F;margin-bottom:3px">РІК</div><div style="font-size:13px;font-weight:700">2022</div></div>
+            <div style="background:#121514;border:1px solid #1C211E;border-radius:10px;padding:10px"><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;color:#5C665F;margin-bottom:3px">ПРОБІГ</div><div style="font-size:13px;font-weight:700">18k mi</div></div>
+            <div style="background:#121514;border:1px solid #1C211E;border-radius:10px;padding:10px"><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;color:#5C665F;margin-bottom:3px">ПАЛИВО</div><div style="font-size:13px;font-weight:700">Електро</div></div>
+          </div>
+          <div style="margin-top:12px;background:#121514;border:1px solid #242927;border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:32px;height:32px;border-radius:9px;background:rgba(76,217,123,.12);border:1px solid rgba(76,217,123,.3);display:flex;align-items:center;justify-content:center">
+                <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 8.5 L6 12.5 L14 3.5" fill="none" stroke="#4CD97B" stroke-width="2.2" stroke-linecap="round"></path></svg>
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:700">VIN перевірено</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C665F;margin-top:2px">WP0ZZZY1X···0417</div>
+              </div>
+            </div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:#4CD97B">ЗВІТ →</span>
+          </div>
+        </div>
+        <div style="position:sticky;bottom:0;padding:14px 20px 26px;background:linear-gradient(180deg,rgba(11,13,12,0),#0B0D0C 30%);margin-top:16px;display:flex;gap:10px">
+          <div style="flex:1;border:none;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:15px;border-radius:12px;text-align:center">Зв'язатися з менеджером</div>
+          <div style="width:52px;border:1px solid #242927;border-radius:12px;display:flex;align-items:center;justify-content:center">
+            <svg width="13" height="16" viewBox="0 0 13 16"><path d="M1 1 H12 V15 L6.5 10.5 L1 15 Z" fill="none" stroke="#4CD97B" stroke-width="1.4"></path></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTES -->
+      <div style="width:340px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#0E1110;border:1px solid #1E2421;border-radius:16px;padding:22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#4CD97B;margin-bottom:12px">RESPONSIVE-РІШЕННЯ</div>
+          <div style="font-size:13.5px;color:#C9D2CC;line-height:1.7">Фільтри йдуть у bottom-sheet, навігація — у нижній таб-бар, CTA закріплюється знизу екрана. Пошук спрощено до одного поля + два селекти.</div>
+        </div>
+        <div style="background:#0E1110;border:1px solid #1E2421;border-radius:16px;padding:22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#4CD97B;margin-bottom:12px">АНІМАЦІЇ</div>
+          <div style="font-size:13.5px;color:#C9D2CC;line-height:1.7">Hero — відеофон зі стоп-кадром як постером. Контент з'являється stagger'ом (fadeUp, 150ms кроки). Картки: hover-підйом 6px + акцентна рамка. Статуси «в дорозі» пульсують.</div>
+        </div>
+        <div style="background:#0E1110;border:1px solid #1E2421;border-radius:16px;padding:22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#4CD97B;margin-bottom:12px">ПРИНЦИП ДОВІРИ</div>
+          <div style="font-size:13.5px;color:#C9D2CC;line-height:1.7">Кожен екран має «доказ»: VIN-звіт, статус доставки, ціна «під ключ» без прихованих платежів. Моноширинний шрифт кодує факти, Manrope — розмову.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      colors: [
+        { name: 'Background', hex: '#0B0D0C', token: 'bg' },
+        { name: 'Surface', hex: '#121514', token: 'surface' },
+        { name: 'Border', hex: '#242927', token: 'border' },
+        { name: 'Text', hex: '#F2F5F3', token: 'text' },
+        { name: 'Muted', hex: '#98A29C', token: 'text-muted' },
+        { name: 'Accent', hex: '#4CD97B', token: 'accent' },
+        { name: 'Accent deep', hex: '#2FA35B', token: 'accent-600' },
+        { name: 'Warning', hex: '#FFB04C', token: 'in-transit' }
+      ],
+      anatomy: [
+        { n: '01', t: 'Фото 16:10', d: 'реальне фото або плейсхолдер; фон #0E100F' },
+        { n: '02', t: 'Бейдж', d: 'Certified / New Arrival / Price Drop, зліва зверху' },
+        { n: '03', t: 'Зберегти', d: 'прапорець 34px, зправа зверху, стан filled' },
+        { n: '04', t: 'Назва + ціна', d: 'ціна завжди акцентним зеленим, стара — закреслена' },
+        { n: '05', t: 'Спек-рядок', d: 'рік · пробіг · паливо, JetBrains Mono' },
+        { n: '06', t: 'Статус', d: 'крапка: янтарна «в дорозі», зелена «в Україні»' }
+      ],
+      spacings: [
+        { v: '4', h: '8px' }, { v: '8', h: '14px' }, { v: '12', h: '20px' },
+        { v: '16', h: '26px' }, { v: '24', h: '36px' }, { v: '32', h: '46px' }, { v: '56', h: '62px' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

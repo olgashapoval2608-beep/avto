@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#0B0D0C}
+    *{box-sizing:border-box}
+    ::selection{background:rgba(76,217,123,.3)}
+    input::placeholder, textarea::placeholder{color:#5C665F}
+    input:focus, textarea:focus, select:focus{outline:none;border-color:rgba(76,217,123,.5) !important}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.35}}
+    [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+    [data-reveal].rv{opacity:1;transform:none}
+  </style>
+</helmet>
+
+{{ motionStyle }}
+
+<div style="min-height:100vh;background:#0B0D0C;color:#F2F5F3;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased">
+
+  <header style="position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(11,13,12,.82);border-bottom:1px solid rgba(255,255,255,.07)">
+    <div style="max-width:1280px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;gap:36px">
+      <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:baseline;gap:10px;user-select:none">
+        <span style="font-weight:800;font-size:20px;letter-spacing:4px">SOVBEZ</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:#4CD97B">AUTO IMPORT</span>
+      </div>
+      <nav style="display:flex;gap:6px;flex:1">
+        <sc-for list="{{ navLinks }}" as="lnk" hint-placeholder-count="4">
+          <button onClick="{{ lnk.go }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;background: {{ lnk.bg }};color: {{ lnk.color }};transition:color .2s,background .2s;display:flex;align-items:center;gap:7px" style-hover="color:#F2F5F3;background:rgba(255,255,255,.06)">
+            {{ lnk.label }}
+            <sc-if value="{{ lnk.count }}" hint-placeholder-val="{{ false }}">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(76,217,123,.16);color:#4CD97B;border-radius:20px;padding:2px 7px">{{ lnk.count }}</span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </nav>
+      <button onClick="{{ goContact }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:11px 22px;border-radius:10px;transition:transform .25s,box-shadow .25s" style-hover="transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(76,217,123,.5)">Підібрати авто</button>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <main data-screen-label="Homepage" style="animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+
+      <section style="position:relative;height:88vh;min-height:640px;overflow:hidden;display:flex;align-items:flex-end">
+        <video src="assets/hero-video.mp4" poster="assets/taycan-clean.png" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92;animation:fadeIn 2s ease"></video>
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,13,12,.85) 0%,rgba(11,13,12,.4) 45%,rgba(11,13,12,.1) 100%)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,12,.5) 0%,rgba(11,13,12,0) 30%,rgba(11,13,12,.35) 75%,#0B0D0C 100%)"></div>
+
+        <div style="position:relative;max-width:1280px;margin:0 auto;padding:0 32px 52px;width:100%">
+          <div style="max-width:640px">
+            <div style="display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;border:1px solid rgba(76,217,123,.3);border-radius:20px;padding:7px 16px;background:rgba(76,217,123,.08);animation:fadeUp .8s .1s cubic-bezier(.2,.7,.2,1) both">
+              <span style="width:6px;height:6px;border-radius:50%;background:#4CD97B;animation:dotPulse 2s infinite"></span>
+              АВТО З США · ПІД КЛЮЧ
+            </div>
+            <h1 style="font-size:58px;line-height:1.05;font-weight:800;letter-spacing:-1.5px;margin:22px 0 16px;animation:fadeUp .8s .25s cubic-bezier(.2,.7,.2,1) both">Чесно про авто —<br>без <span style="color:#4CD97B">«казок»</span></h1>
+            <p style="font-size:17px;line-height:1.6;color:#B9C3BD;margin:0 0 8px;max-width:460px;animation:fadeUp .8s .4s cubic-bezier(.2,.7,.2,1) both">Підбір, перевірка, доставка та розмитнення. Ви бачите кожен етап і кожен долар у ціні.</p>
+          </div>
+
+          <div style="margin-top:34px;background:rgba(17,21,19,.86);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;display:flex;gap:12px;align-items:stretch;animation:fadeUp .8s .55s cubic-bezier(.2,.7,.2,1) both;box-shadow:0 32px 64px -32px rgba(0,0,0,.8)">
+            <div style="flex:1.4;display:flex;flex-direction:column;gap:6px">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">МАРКА / МОДЕЛЬ</label>
+              <input value="{{ hQ }}" onChange="{{ onHQ }}" placeholder="Напр., Mazda 3" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:12px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px;transition:border-color .2s">
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">РІК ВІД</label>
+              <select value="{{ hYear }}" onChange="{{ onHYear }}" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:12px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px;cursor:pointer">
+                <option value="2018">2018</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option>
+              </select>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">БЮДЖЕТ ДО</label>
+              <select value="{{ hPrice }}" onChange="{{ onHPrice }}" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:12px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px;cursor:pointer">
+                <option value="15">$15 000</option><option value="20">$20 000</option><option value="30">$30 000</option><option value="65">$65 000</option>
+              </select>
+            </div>
+            <button onClick="{{ heroSearch }}" style="align-self:flex-end;border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:0 34px;height:45px;border-radius:10px;transition:transform .25s,box-shadow .25s;white-space:nowrap" style-hover="transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(76,217,123,.5)">Знайти авто</button>
+          </div>
+
+          <div style="display:flex;gap:40px;margin-top:26px;animation:fadeUp .8s .7s cubic-bezier(.2,.7,.2,1) both">
+            <sc-for list="{{ heroStats }}" as="st" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:26px;font-weight:800;letter-spacing:-.5px">{{ st.n }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:1.5px;color:#8B968F">{{ st.l }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:72px 32px 0">
+        <div data-reveal style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
+          <h2 style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin:0">Категорії</h2>
+          <button onClick="{{ goListingAll }}" style="border:none;background:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1.5px;color:#4CD97B;padding:0" style-hover="text-decoration:underline">УВЕСЬ КАТАЛОГ →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <sc-for list="{{ catTiles }}" as="ct" hint-placeholder-count="4">
+            <div data-reveal onClick="{{ ct.go }}" style="background:#121514;border:1px solid #242927;border-radius:16px;padding:24px;cursor:pointer;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s" style-hover="transform:translateY(-4px);border-color:rgba(76,217,123,.4)">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C665F;letter-spacing:2px">{{ ct.idx }}</div>
+              <div style="font-size:19px;font-weight:700;margin:36px 0 4px">{{ ct.label }}</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#4CD97B">{{ ct.n }} авто →</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:72px 32px 0">
+        <div data-reveal style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
+          <h2 style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin:0">Рекомендовані</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#5C665F">ПЕРЕВІРЕНІ МЕНЕДЖЕРОМ</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+          <sc-for list="{{ featured }}" as="car" hint-placeholder-count="3">
+            <div data-reveal>
+              <dc-import name="CarCard" car="{{ car }}" hint-size="100%,330px"></dc-import>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:88px 32px 0">
+        <h2 data-reveal style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin:0 0 24px">Як це працює</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <sc-for list="{{ steps }}" as="sp" hint-placeholder-count="4">
+            <div data-reveal style="background:#121514;border:1px solid #242927;border-radius:16px;padding:24px;position:relative;overflow:hidden">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:600;color:rgba(76,217,123,.14);position:absolute;top:10px;right:16px">{{ sp.idx }}</div>
+              <div style="width:34px;height:3px;background:linear-gradient(90deg,#4CD97B,transparent);border-radius:2px;margin-bottom:44px"></div>
+              <div style="font-size:16px;font-weight:700;margin-bottom:7px">{{ sp.t }}</div>
+              <div style="font-size:13.5px;line-height:1.55;color:#98A29C">{{ sp.d }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:88px 32px 8px">
+        <div data-reveal style="background:linear-gradient(135deg,#10241A,#0D1712);border:1px solid rgba(76,217,123,.25);border-radius:22px;padding:52px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+          <div>
+            <h2 style="font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 10px">Не знайшли своє авто?</h2>
+            <p style="font-size:15px;color:#98A29C;margin:0;max-width:480px;line-height:1.6">Залиште запит — підберемо варіанти з аукціонів США під ваш бюджет протягом 24 годин.</p>
+          </div>
+          <button onClick="{{ goContact }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:16px 34px;border-radius:12px;white-space:nowrap;transition:transform .25s,box-shadow .25s" style-hover="transform:translateY(-2px);box-shadow:0 12px 32px -10px rgba(76,217,123,.5)">Залишити запит</button>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+
+  <!-- ============ LISTING ============ -->
+  <sc-if value="{{ isListing }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Catalog / Listing" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;margin-bottom:8px">ГОЛОВНА / КАТАЛОГ</div>
+          <h1 style="font-size:34px;font-weight:800;letter-spacing:-1px;margin:0">Каталог авто</h1>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#98A29C">{{ resultCount }} авто</span>
+          <select value="{{ sort }}" onChange="{{ onSort }}" style="background:#121514;border:1px solid #242927;border-radius:10px;padding:10px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:13.5px;cursor:pointer">
+            <option value="rec">Рекомендовані</option>
+            <option value="priceAsc">Ціна: спочатку дешевші</option>
+            <option value="priceDesc">Ціна: спочатку дорожчі</option>
+            <option value="yearDesc">Рік: новіші</option>
+            <option value="miAsc">Пробіг: менший</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:264px 1fr;gap:28px;align-items:start">
+        <aside style="background:#121514;border:1px solid #242927;border-radius:16px;padding:22px;position:sticky;top:92px;display:flex;flex-direction:column;gap:22px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ПОШУК</label>
+            <input value="{{ fQ }}" onChange="{{ onFQ }}" placeholder="Марка або модель" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:11px 13px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:13.5px;transition:border-color .2s">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ТИП КУЗОВА</label>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ catOpts }}" as="o" hint-placeholder-count="5">
+                <button onClick="{{ o.toggle }}" style="border:1px solid;cursor:pointer;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:20px;transition:all .2s;background: {{ o.bg }};color: {{ o.color }};border-color: {{ o.border }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ЦІНА ДО</label>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4CD97B">{{ priceMaxFmt }}</span>
+            </div>
+            <input type="range" min="10" max="65" step="1" value="{{ priceMax }}" onChange="{{ onPriceMax }}" style="width:100%;accent-color:#4CD97B;cursor:pointer">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">РІК ВІД</label>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4CD97B">{{ yearMin }}</span>
+            </div>
+            <input type="range" min="2018" max="2024" step="1" value="{{ yearMin }}" onChange="{{ onYearMin }}" style="width:100%;accent-color:#4CD97B;cursor:pointer">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ПРОБІГ ДО</label>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4CD97B">{{ miMaxFmt }}</span>
+            </div>
+            <input type="range" min="10" max="60" step="5" value="{{ miMax }}" onChange="{{ onMiMax }}" style="width:100%;accent-color:#4CD97B;cursor:pointer">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ПАЛИВО</label>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ fuelOpts }}" as="o" hint-placeholder-count="4">
+                <button onClick="{{ o.toggle }}" style="border:1px solid;cursor:pointer;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:20px;transition:all .2s;background: {{ o.bg }};color: {{ o.color }};border-color: {{ o.border }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">КОРОБКА</label>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ transOpts }}" as="o" hint-placeholder-count="2">
+                <button onClick="{{ o.toggle }}" style="border:1px solid;cursor:pointer;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:20px;transition:all .2s;background: {{ o.bg }};color: {{ o.color }};border-color: {{ o.border }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">СТАТУС</label>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ statusOpts }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.toggle }}" style="border:1px solid;cursor:pointer;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:20px;transition:all .2s;background: {{ o.bg }};color: {{ o.color }};border-color: {{ o.border }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <button onClick="{{ resetFilters }}" style="border:1px solid #242927;background:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#98A29C;padding:11px;border-radius:10px;transition:all .2s" style-hover="border-color:rgba(76,217,123,.4);color:#4CD97B">СКИНУТИ ФІЛЬТРИ</button>
+        </aside>
+
+        <div>
+          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+              <sc-for list="{{ results }}" as="car" hint-placeholder-count="6">
+                <dc-import name="CarCard" car="{{ car }}" hint-size="100%,330px"></dc-import>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+            <div data-screen-label="Empty state" style="border:1px dashed #242927;border-radius:18px;padding:90px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;animation:fadeIn .4s ease">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:52px;font-weight:600;color:rgba(76,217,123,.25);letter-spacing:2px">0</div>
+              <div style="font-size:20px;font-weight:800;margin:14px 0 8px">Нічого не знайшли</div>
+              <div style="font-size:14px;color:#98A29C;max-width:380px;line-height:1.6;margin-bottom:24px">За цими фільтрами авто немає. Спробуйте розширити критерії — або залиште запит, і ми знайдемо авто на аукціоні під вас.</div>
+              <div style="display:flex;gap:12px">
+                <button onClick="{{ resetFilters }}" style="border:1px solid #242927;background:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:#F2F5F3;padding:12px 22px;border-radius:10px;transition:border-color .2s" style-hover="border-color:rgba(76,217,123,.5)">Скинути фільтри</button>
+                <button onClick="{{ goContact }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:12px 22px;border-radius:10px">Запит на підбір</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <!-- ============ DETAIL ============ -->
+  <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Product detail" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+      <button onClick="{{ goListingAll }}" style="border:none;background:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;padding:0;margin-bottom:22px;transition:color .2s" style-hover="color:#4CD97B">← КАТАЛОГ / {{ dTitleUp }}</button>
+
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:start">
+        <div>
+          <div style="position:relative;height:440px;border-radius:18px;overflow:hidden;background:#0E100F;border:1px solid #242927">
+            <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}">
+              <div role="img" aria-label="{{ dTitle }}" style="width:100%;height:100%;background-image:url('{{ dImg }}');background-size:cover;background-position:center;animation:fadeIn .5s ease"></div>
+            </sc-if>
+            <sc-if value="{{ dNoImg }}" hint-placeholder-val="{{ false }}">
+              <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#121614 0 18px,#161B18 18px 36px)">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2.5px;color:#5C665F">PHOTO · {{ dGalLabel }}</span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ dBadge }}" hint-placeholder-val="{{ false }}">
+              <span style="position:absolute;top:16px;left:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;font-weight:600;padding:6px 12px;border-radius:7px;backdrop-filter:blur(8px);background: {{ dBadgeBg }};color: {{ dBadgeColor }}">{{ dBadge }}</span>
+            </sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px">
+            <sc-for list="{{ dThumbs }}" as="th" hint-placeholder-count="5">
+              <div onClick="{{ th.pick }}" style="height:66px;border-radius:10px;overflow:hidden;cursor:pointer;border:1.5px solid;transition:border-color .2s;border-color: {{ th.border }};background:#0E100F" style-hover="border-color:rgba(76,217,123,.6)">
+                <sc-if value="{{ th.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <div role="img" aria-label="{{ th.label }}" style="width:100%;height:100%;background-image:url('{{ th.img }}');background-size:cover;background-position:center"></div>
+                </sc-if>
+                <sc-if value="{{ th.noImg }}" hint-placeholder-val="{{ true }}">
+                  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#121614 0 10px,#161B18 10px 20px)">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#5C665F">{{ th.label }}</span>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div data-reveal style="margin-top:28px;background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:38px;height:38px;border-radius:10px;background:rgba(76,217,123,.12);border:1px solid rgba(76,217,123,.3);display:flex;align-items:center;justify-content:center">
+                  <svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 8.5 L6 12.5 L14 3.5" fill="none" stroke="#4CD97B" stroke-width="2.2" stroke-linecap="round"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size:16px;font-weight:800">Перевірка VIN</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#98A29C;margin-top:2px">{{ dVin }}</div>
+                </div>
+              </div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#4CD97B;background:rgba(76,217,123,.1);border:1px solid rgba(76,217,123,.25);padding:6px 12px;border-radius:20px">ПЕРЕВІРЕНО</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+              <sc-for list="{{ vinChecks }}" as="vc" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:10px;background:#0B0D0C;border:1px solid #1C211E;border-radius:10px;padding:12px 14px">
+                  <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 8.5 L6 12.5 L14 3.5" fill="none" stroke="#4CD97B" stroke-width="2.4" stroke-linecap="round"></path></svg>
+                  <span style="font-size:13px;color:#C9D2CC">{{ vc }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <button style="margin-top:16px;border:1px solid #242927;background:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#98A29C;padding:11px 18px;border-radius:10px;transition:all .2s" style-hover="border-color:rgba(76,217,123,.4);color:#4CD97B">ЗВІТ CARFAX (PDF) ↓</button>
+          </div>
+
+          <div data-reveal style="margin-top:20px;background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="font-size:16px;font-weight:800;margin-bottom:12px">Повні специфікації</div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px">
+              <sc-for list="{{ dSpecs }}" as="sp" hint-placeholder-count="8">
+                <div style="display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #1C211E">
+                  <span style="font-size:13px;color:#98A29C">{{ sp.k }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#F2F5F3;text-align:right">{{ sp.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+              <span style="width:7px;height:7px;border-radius:50%;animation:dotPulse 2s infinite;background: {{ dStColor }}"></span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:1.5px;color:#98A29C">{{ dSt }}</span>
+            </div>
+            <h1 style="font-size:26px;font-weight:800;letter-spacing:-.5px;margin:0 0 6px">{{ dTitle }}</h1>
+            <div style="display:flex;align-items:baseline;gap:10px;margin:10px 0 4px">
+              <span style="font-size:32px;font-weight:800;color:#4CD97B">{{ dPriceFmt }}</span>
+              <sc-if value="{{ dOpFmt }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:16px;color:#5C665F;text-decoration:line-through">{{ dOpFmt }}</span>
+              </sc-if>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#5C665F;margin-bottom:20px">ЦІНА ПІД КЛЮЧ В УКРАЇНІ</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+              <sc-for list="{{ dKeySpecs }}" as="ks" hint-placeholder-count="6">
+                <div style="background:#0B0D0C;border:1px solid #1C211E;border-radius:10px;padding:11px 12px">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#5C665F;margin-bottom:4px">{{ ks.k }}</div>
+                  <div style="font-size:13px;font-weight:700">{{ ks.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button onClick="{{ dContact }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:15px;border-radius:11px;transition:transform .25s,box-shadow .25s" style-hover="transform:translateY(-1px);box-shadow:0 10px 28px -10px rgba(76,217,123,.5)">Зв'язатися з менеджером</button>
+              <button onClick="{{ dToggleSave }}" style="border:1px solid #242927;background:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:#F2F5F3;padding:13px;border-radius:11px;transition:all .2s" style-hover="border-color:rgba(76,217,123,.5);color:#4CD97B">{{ dSaveLabel }}</button>
+            </div>
+          </div>
+
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="font-size:16px;font-weight:800;margin-bottom:4px">Розстрочка / фінансування</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:1px;color:#5C665F;margin-bottom:18px">СТАВКА 11.9% РІЧНИХ · ОРІЄНТОВНО</div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#8B968F">АВАНС</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4CD97B">{{ downFmt }}</span>
+                </div>
+                <input type="range" min="10" max="70" step="5" value="{{ downPct }}" onChange="{{ onDown }}" style="width:100%;accent-color:#4CD97B;cursor:pointer">
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#8B968F">СТРОК</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4CD97B">{{ months }} міс</span>
+                </div>
+                <input type="range" min="12" max="84" step="12" value="{{ months }}" onChange="{{ onMonths }}" style="width:100%;accent-color:#4CD97B;cursor:pointer">
+              </div>
+              <div style="background:linear-gradient(135deg,#10241A,#0D1712);border:1px solid rgba(76,217,123,.25);border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:13px;color:#98A29C">Щомісячний платіж</span>
+                <span style="font-size:22px;font-weight:800;color:#4CD97B">{{ monthlyFmt }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section style="margin-top:56px">
+        <h2 data-reveal style="font-size:24px;font-weight:800;letter-spacing:-.5px;margin:0 0 20px">Схожі авто</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+          <sc-for list="{{ similar }}" as="car" hint-placeholder-count="3">
+            <dc-import name="CarCard" car="{{ car }}" hint-size="100%,330px"></dc-import>
+          </sc-for>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+
+  <!-- ============ SAVED ============ -->
+  <sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Saved / Compare" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;margin-bottom:8px">ГОЛОВНА / ЗБЕРЕЖЕНІ</div>
+      <h1 style="font-size:34px;font-weight:800;letter-spacing:-1px;margin:0 0 26px">Збережені авто</h1>
+
+      <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#121514;border:1px solid #242927;border-radius:18px;overflow:hidden">
+          <div style="display:grid;padding:22px 26px;gap:16px;border-bottom:1px solid #1C211E;grid-template-columns: {{ cmpCols }}">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#5C665F;align-self:end">ПОРІВНЯННЯ</div>
+            <sc-for list="{{ savedCars }}" as="sc" hint-placeholder-count="2">
+              <div>
+                <div style="height:86px;border-radius:10px;overflow:hidden;background:#0E100F;margin-bottom:10px">
+                  <sc-if value="{{ sc.hasImg }}" hint-placeholder-val="{{ false }}">
+                    <div role="img" aria-label="{{ sc.title }}" style="width:100%;height:100%;background-image:url('{{ sc.img }}');background-size:cover;background-position:center"></div>
+                  </sc-if>
+                  <sc-if value="{{ sc.noImg }}" hint-placeholder-val="{{ true }}">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#121614 0 12px,#161B18 12px 24px)">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#5C665F">{{ sc.ph }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                  <span onClick="{{ sc.open }}" style="font-size:14px;font-weight:700;cursor:pointer" style-hover="color:#4CD97B">{{ sc.title }}</span>
+                  <button onClick="{{ sc.remove }}" title="Прибрати" style="border:none;background:none;cursor:pointer;color:#5C665F;font-size:16px;padding:2px 6px;transition:color .2s" style-hover="color:#FF7A6B">✕</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ compareRows }}" as="row" hint-placeholder-count="8">
+            <div style="display:grid;padding:13px 26px;gap:16px;border-bottom:1px solid #141816;grid-template-columns: {{ cmpCols }}">
+              <div style="font-size:13px;color:#98A29C">{{ row.label }}</div>
+              <sc-for list="{{ row.vals }}" as="v">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#F2F5F3">{{ v }}</div>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="padding:20px 26px;display:flex;justify-content:flex-end">
+            <button onClick="{{ goContact }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:13px 26px;border-radius:10px;transition:transform .25s" style-hover="transform:translateY(-1px)">Запит на перегляд обраних</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noSaved }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed #242927;border-radius:18px;padding:90px 40px;display:flex;flex-direction:column;align-items:center;text-align:center">
+          <svg width="26" height="32" viewBox="0 0 13 16"><path d="M1 1 H12 V15 L6.5 10.5 L1 15 Z" fill="none" stroke="#3A443E" stroke-width="1.2"></path></svg>
+          <div style="font-size:20px;font-weight:800;margin:18px 0 8px">Поки нічого не збережено</div>
+          <div style="font-size:14px;color:#98A29C;max-width:360px;line-height:1.6;margin-bottom:24px">Натискайте прапорець на картці авто, щоб зберегти його сюди й порівняти варіанти поруч.</div>
+          <button onClick="{{ goListingAll }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:13px 26px;border-radius:10px">До каталогу</button>
+        </div>
+      </sc-if>
+    </main>
+  </sc-if>
+
+  <!-- ============ CONTACT ============ -->
+  <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Contact / Request flow" style="max-width:720px;margin:0 auto;padding:44px 32px 60px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:30px">
+        <sc-for list="{{ stepBadges }}" as="sb" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;padding:7px 14px;border-radius:20px;border:1px solid;transition:all .3s;background: {{ sb.bg }};color: {{ sb.color }};border-color: {{ sb.border }}">{{ sb.idx }} · {{ sb.label }}</span>
+            <sc-if value="{{ sb.notLast }}" hint-placeholder-val="{{ true }}"><span style="width:22px;height:1px;background:#242927"></span></sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ cStep1 }}" hint-placeholder-val="{{ true }}">
+        <h1 style="font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 8px">З чим допомогти?</h1>
+        <p style="font-size:14.5px;color:#98A29C;margin:0 0 24px;line-height:1.6">Це запит, а не миттєва покупка. Менеджер зв'яжеться з вами протягом 2 годин у робочий час.</p>
+        <sc-if value="{{ selCarChip }}" hint-placeholder-val="{{ false }}">
+          <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(76,217,123,.08);border:1px solid rgba(76,217,123,.3);border-radius:12px;padding:11px 16px;margin-bottom:20px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#4CD97B">ОБРАНЕ АВТО</span>
+            <span style="font-size:14px;font-weight:700">{{ selCarChip }}</span>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+          <sc-for list="{{ typeOpts }}" as="t" hint-placeholder-count="4">
+            <div onClick="{{ t.pick }}" style="border-radius:14px;padding:20px;cursor:pointer;border:1px solid;transition:all .25s;background: {{ t.bg }};border-color: {{ t.border }}" style-hover="border-color:rgba(76,217,123,.55)">
+              <div style="font-size:15.5px;font-weight:700;margin-bottom:5px">{{ t.t }}</div>
+              <div style="font-size:13px;color:#98A29C;line-height:1.5">{{ t.d }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ next1 }}" style="margin-top:24px;width:100%;border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:15px;border-radius:11px;transition:opacity .2s;opacity: {{ next1Op }}">Далі →</button>
+      </sc-if>
+
+      <sc-if value="{{ cStep2 }}" hint-placeholder-val="{{ false }}">
+        <h1 style="font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 8px">Ваші контакти</h1>
+        <p style="font-size:14.5px;color:#98A29C;margin:0 0 24px;line-height:1.6">Жодних розсилок — тільки відповідь по вашому запиту.</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ІМ'Я *</label>
+              <input value="{{ cName }}" onChange="{{ onCName }}" placeholder="Як до вас звертатися" style="background:#121514;border:1px solid #242927;border-radius:10px;padding:13px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ТЕЛЕФОН *</label>
+              <input value="{{ cPhone }}" onChange="{{ onCPhone }}" placeholder="+380" style="background:#121514;border:1px solid #242927;border-radius:10px;padding:13px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px">
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ЗРУЧНИЙ МЕСЕНДЖЕР</label>
+            <div style="display:flex;gap:8px">
+              <sc-for list="{{ msgrOpts }}" as="m" hint-placeholder-count="3">
+                <button onClick="{{ m.pick }}" style="border:1px solid;cursor:pointer;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:10px 18px;border-radius:20px;transition:all .2s;background: {{ m.bg }};color: {{ m.color }};border-color: {{ m.border }}">{{ m.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">КОМЕНТАР</label>
+            <textarea value="{{ cNote }}" onChange="{{ onCNote }}" rows="3" placeholder="Бюджет, побажання, терміни…" style="background:#121514;border:1px solid #242927;border-radius:10px;padding:13px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px;resize:vertical"></textarea>
+          </div>
+          <sc-if value="{{ cErr }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px;color:#FF7A6B;background:rgba(255,122,107,.08);border:1px solid rgba(255,122,107,.3);border-radius:10px;padding:12px 14px">{{ cErr }}</div>
+          </sc-if>
+          <div style="display:flex;gap:12px">
+            <button onClick="{{ back2 }}" style="border:1px solid #242927;background:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:#F2F5F3;padding:14px 22px;border-radius:11px" style-hover="border-color:rgba(76,217,123,.4)">← Назад</button>
+            <button onClick="{{ submit }}" style="flex:1;border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:14px;border-radius:11px;transition:transform .25s" style-hover="transform:translateY(-1px)">Надіслати запит</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ cStep3 }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:40px 0;animation:fadeUp .6s cubic-bezier(.2,.7,.2,1)">
+          <div style="width:74px;height:74px;border-radius:50%;background:rgba(76,217,123,.12);border:1px solid rgba(76,217,123,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 22px">
+            <svg width="30" height="30" viewBox="0 0 16 16"><path d="M2 8.5 L6 12.5 L14 3.5" fill="none" stroke="#4CD97B" stroke-width="2" stroke-linecap="round"></path></svg>
+          </div>
+          <h1 style="font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 10px">Запит надіслано</h1>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1.5px;color:#4CD97B;margin-bottom:14px">№ {{ reqId }}</div>
+          <p style="font-size:14.5px;color:#98A29C;margin:0 auto 28px;max-width:400px;line-height:1.65">Менеджер зв'яжеться з вами протягом 2 годин у робочий час (9:00–19:00). Статус запиту — у вашому кабінеті.</p>
+          <div style="display:flex;gap:12px;justify-content:center">
+            <button onClick="{{ goAccount }}" style="border:1px solid #242927;background:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:#F2F5F3;padding:13px 22px;border-radius:10px" style-hover="border-color:rgba(76,217,123,.4)">До кабінету</button>
+            <button onClick="{{ goListingAll }}" style="border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:13px 22px;border-radius:10px">Дивитися каталог</button>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+  </sc-if>
+
+  <!-- ============ ACCOUNT ============ -->
+  <sc-if value="{{ isAccount }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="My Account" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;margin-bottom:8px">ГОЛОВНА / КАБІНЕТ</div>
+      <h1 style="font-size:34px;font-weight:800;letter-spacing:-1px;margin:0 0 26px">Мій кабінет</h1>
+
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px;text-align:center">
+            <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#10241A,#183A28);border:1px solid rgba(76,217,123,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;font-weight:800;color:#4CD97B">ОК</div>
+            <div style="font-size:17px;font-weight:800">Олексій Клієнт</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C665F;margin-top:4px">+380 67 ··· ·· 42</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px">
+              <div style="background:#0B0D0C;border:1px solid #1C211E;border-radius:10px;padding:12px">
+                <div style="font-size:20px;font-weight:800;color:#4CD97B">{{ accSavedCount }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:#5C665F;margin-top:2px">ЗБЕРЕЖЕНІ</div>
+              </div>
+              <div style="background:#0B0D0C;border:1px solid #1C211E;border-radius:10px;padding:12px">
+                <div style="font-size:20px;font-weight:800;color:#4CD97B">{{ accReqCount }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:#5C665F;margin-top:2px">ЗАЯВКИ</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:24px">
+            <div style="font-size:15px;font-weight:800;margin-bottom:14px">Сповіщення</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ notifOpts }}" as="n" hint-placeholder-count="3">
+                <div onClick="{{ n.toggle }}" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:12px">
+                  <span style="font-size:13.5px;color:#C9D2CC">{{ n.label }}</span>
+                  <span style="width:36px;height:20px;border-radius:20px;position:relative;transition:background .25s;flex-shrink:0;background: {{ n.trackBg }}">
+                    <span style="position:absolute;top:2px;width:16px;height:16px;border-radius:50%;background:#F2F5F3;transition:left .25s;left: {{ n.knobLeft }}"></span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-size:16px;font-weight:800">Збережені пошуки</div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#5C665F">СПОВІЩАЄМО ПРО НОВІ АВТО</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <sc-for list="{{ savedSearches }}" as="ss" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:10px;background:#0B0D0C;border:1px solid #242927;border-radius:20px;padding:9px 9px 9px 16px">
+                  <span onClick="{{ ss.go }}" style="font-size:13px;font-weight:600;cursor:pointer" style-hover="color:#4CD97B">{{ ss.label }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#4CD97B;background:rgba(76,217,123,.1);border-radius:14px;padding:3px 8px">+{{ ss.fresh }}</span>
+                  <button onClick="{{ ss.remove }}" style="border:none;background:none;cursor:pointer;color:#5C665F;font-size:13px;padding:0 4px;transition:color .2s" style-hover="color:#FF7A6B">✕</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="font-size:16px;font-weight:800;margin-bottom:16px">Мої заявки</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ myRequests }}" as="rq" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:14px;background:#0B0D0C;border:1px solid #1C211E;border-radius:12px;padding:14px 16px">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C665F">{{ rq.id }}</span>
+                  <span style="font-size:14px;font-weight:600;flex:1">{{ rq.title }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 11px;border-radius:14px;background: {{ rq.stBg }};color: {{ rq.stColor }}">{{ rq.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
+            <div style="font-size:16px;font-weight:800;margin-bottom:16px">Історія переглядів</div>
+            <sc-if value="{{ hasHist }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ histCars }}" as="h" hint-placeholder-count="3">
+                  <div onClick="{{ h.open }}" style="display:flex;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid #141816;cursor:pointer;border-radius:8px;transition:background .2s" style-hover="background:rgba(255,255,255,.03)">
+                    <span style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background: {{ h.stColor }}"></span>
+                    <span style="font-size:14px;font-weight:600;flex:1">{{ h.title }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#98A29C">{{ h.sub }}</span>
+                    <span style="font-size:14px;font-weight:800;color:#4CD97B">{{ h.priceFmt }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noHist }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13.5px;color:#5C665F">Ви ще не переглядали авто — відкрийте <span onClick="{{ goListingAll }}" style="color:#4CD97B;cursor:pointer;text-decoration:underline">каталог</span>.</div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="border-top:1px solid rgba(255,255,255,.07);margin-top:56px">
+    <div style="max-width:1280px;margin:0 auto;padding:40px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;align-items:baseline;gap:10px">
+        <span style="font-weight:800;font-size:16px;letter-spacing:3px">SOVBEZ</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:#4CD97B">AUTO IMPORT</span>
+      </div>
+      <div style="display:flex;gap:22px;font-size:13px;color:#98A29C">
+        <span style="cursor:pointer" style-hover="color:#4CD97B" onClick="{{ goListingAll }}">Каталог</span>
+        <span style="cursor:pointer" style-hover="color:#4CD97B" onClick="{{ goSaved }}">Збережені</span>
+        <span style="cursor:pointer" style-hover="color:#4CD97B" onClick="{{ goContact }}">Підбір авто</span>
+        <a href="https://t.me/sovbezzzzz" target="_blank" style="color:#98A29C;text-decoration:none" style-hover="color:#4CD97B">t.me/sovbezzzzz</a>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:#3A443E">UX/UI ДИЗАЙН-КЕЙС · 2026</div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = {
+    page: 'home', detailId: 1, galIdx: 0,
+    hQ: '', hYear: '2018', hPrice: '65',
+    fQ: '', cat: 'all', priceMax: 65, yearMin: 2018, miMax: 60, fuels: [], trans: [], statusF: 'all', sort: 'rec',
+    saved: [1, 4], history: [],
+    downPct: 30, months: 48,
+    cStep: 1, cType: '', cName: '', cPhone: '', cMsgr: 'Telegram', cNote: '', cErr: '', reqId: '',
+    myRequests: [{ id: 'SVB-2606-138', title: 'Підбір під бюджет · SUV до $18 000', status: 'В РОБОТІ', done: false }],
+    savedSearches: [
+      { label: 'EV до $25 000', fresh: 3 },
+      { label: 'SUV · 2021+ · до 40 тис. миль', fresh: 1 },
+      { label: 'Mazda 3 · автомат', fresh: 2 }
+    ],
+    notif: { price: true, fresh: true, status: false }
+  };
+
+  cars = [
+    { id: 1, mk: 'Porsche', md: 'Taycan Sport Turismo', yr: 2022, pr: 61900, op: null, mi: 18, fu: 'Електро', tr: 'Автомат', en: '2×EM · 476 к.с.', dr: 'Повний (AWD)', cat: 'ev', bd: 'Certified', st: 'В Україні', vin: 'WP0ZZZY1XNSA00417', img: 'assets/taycan-clean.png', loc: 'Київ, шоурум', clr: 'Mamba Green Metallic' },
+    { id: 2, mk: 'Mazda', md: '3 Preferred', yr: 2023, pr: 13999, op: null, mi: 10, fu: 'Бензин', tr: 'Автомат', en: '2.5L · 186 к.с.', dr: 'Передній (FWD)', cat: 'sedan', bd: 'New Arrival', st: 'В дорозі', vin: '3MZBPBCM1PM300112', img: '', loc: 'Порт Клайпеда', clr: 'Machine Gray' },
+    { id: 3, mk: 'Subaru', md: 'Outback Premium', yr: 2023, pr: 16999, op: null, mi: 24, fu: 'Бензин', tr: 'Автомат', en: '2.5L · 182 к.с.', dr: 'Повний (AWD)', cat: 'suv', bd: null, st: 'В дорозі', vin: '4S4BTAFC5P3199240', img: '', loc: 'Атлантика', clr: 'Autumn Green' },
+    { id: 4, mk: 'Tesla', md: 'Model 3 Long Range', yr: 2022, pr: 21400, op: 23900, mi: 31, fu: 'Електро', tr: 'Автомат', en: '2×EM · 440 к.с.', dr: 'Повний (AWD)', cat: 'ev', bd: 'Price Drop', st: 'В Україні', vin: '5YJ3E1EB7NF189554', img: '', loc: 'Київ, майданчик', clr: 'Pearl White' },
+    { id: 5, mk: 'Toyota', md: 'RAV4 XLE', yr: 2021, pr: 19800, op: null, mi: 38, fu: 'Бензин', tr: 'Автомат', en: '2.5L · 203 к.с.', dr: 'Повний (AWD)', cat: 'suv', bd: 'Certified', st: 'В Україні', vin: '2T3P1RFV8MW145880', img: '', loc: 'Київ, майданчик', clr: 'Silver Sky' },
+    { id: 6, mk: 'Ford', md: 'F-150 XLT', yr: 2020, pr: 24500, op: null, mi: 52, fu: 'Бензин', tr: 'Автомат', en: '3.5L V6 Turbo · 400 к.с.', dr: 'Повний (4WD)', cat: 'truck', bd: null, st: 'В дорозі', vin: '1FTEW1EP4LFA22301', img: '', loc: 'Аукціон Copart', clr: 'Oxford White' },
+    { id: 7, mk: 'Honda', md: 'Accord Sport', yr: 2022, pr: 17200, op: 18400, mi: 27, fu: 'Бензин', tr: 'Автомат', en: '1.5L Turbo · 192 к.с.', dr: 'Передній (FWD)', cat: 'sedan', bd: 'Price Drop', st: 'В Україні', vin: '1HGCV1F30NA027716', img: '', loc: 'Львів, майданчик', clr: 'Sonic Gray' },
+    { id: 8, mk: 'Chevrolet', md: 'Bolt EV 2LT', yr: 2023, pr: 15900, op: null, mi: 12, fu: 'Електро', tr: 'Автомат', en: 'EM · 204 к.с.', dr: 'Передній (FWD)', cat: 'ev', bd: 'New Arrival', st: 'В дорозі', vin: '1G1FX6S00P4102934', img: '', loc: 'Порт Гданськ', clr: 'Summit White' },
+    { id: 9, mk: 'Jeep', md: 'Wrangler Sahara', yr: 2021, pr: 27300, op: null, mi: 41, fu: 'Бензин', tr: 'Автомат', en: '3.6L V6 · 285 к.с.', dr: 'Повний (4WD)', cat: 'suv', bd: null, st: 'В Україні', vin: '1C4HJXEG3MW551208', img: '', loc: 'Київ, майданчик', clr: 'Sting Gray' },
+    { id: 10, mk: 'Hyundai', md: 'Tucson SEL', yr: 2022, pr: 16400, op: null, mi: 29, fu: 'Бензин', tr: 'Автомат', en: '2.5L · 187 к.с.', dr: 'Повний (AWD)', cat: 'suv', bd: null, st: 'В дорозі', vin: '5NMJB3AE1NH034572', img: '', loc: 'Атлантика', clr: 'Amazon Gray' },
+    { id: 11, mk: 'BMW', md: '330i xDrive', yr: 2021, pr: 22700, op: null, mi: 35, fu: 'Бензин', tr: 'Автомат', en: '2.0L Turbo · 255 к.с.', dr: 'Повний (AWD)', cat: 'sedan', bd: 'Certified', st: 'В Україні', vin: '3MW5R7J06M8B77410', img: '', loc: 'Київ, шоурум', clr: 'Alpine White' },
+    { id: 12, mk: 'Kia', md: 'Sportage LX', yr: 2023, pr: 17900, op: null, mi: 15, fu: 'Бензин', tr: 'Автомат', en: '2.5L · 187 к.с.', dr: 'Передній (FWD)', cat: 'suv', bd: 'New Arrival', st: 'В дорозі', vin: 'KNDPUCAF7P7011983', img: '', loc: 'Аукціон IAAI', clr: 'Gravity Gray' }
+  ];
+
+  badgeMap = {
+    'Certified': ['rgba(76,217,123,.16)', '#4CD97B'],
+    'New Arrival': ['rgba(125,184,255,.14)', '#7DB8FF'],
+    'Price Drop': ['rgba(255,176,76,.16)', '#FFB04C']
+  };
+
+  componentDidMount() {
+    this.io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting || e.boundingClientRect.top < 0) { e.target.classList.add('rv'); this.io.unobserve(e.target); }
+    }), { threshold: 0.08 });
+    this.scanReveal();
+    this.fixVideos();
+    this.mo = new MutationObserver(() => { this.scanReveal(); this.fixVideos(); });
+    this.mo.observe(document.body, { childList: true, subtree: true });
+  }
+  componentWillUnmount() { if (this.io) this.io.disconnect(); if (this.mo) this.mo.disconnect(); }
+  fixVideos() {
+    document.querySelectorAll('video').forEach(v => {
+      v.muted = true; v.defaultMuted = true;
+      if (v.paused) v.play().catch(() => {});
+    });
+  }
+  scanReveal() {
+    document.querySelectorAll('[data-reveal]:not(.rv)').forEach(el => {
+      if (el.getBoundingClientRect().top < 0) { el.classList.add('rv'); return; }
+      this.io.observe(el);
+    });
+  }
+
+  nav(page, extra) { window.scrollTo(0, 0); this.setState({ page, ...(extra || {}) }); }
+
+  money(n) { return '$' + n.toLocaleString('en-US'); }
+
+  goCar(id) {
+    const h = [id, ...this.state.history.filter(x => x !== id)].slice(0, 5);
+    this.nav('detail', { detailId: id, galIdx: 0, history: h });
+  }
+  toggleSave(id) {
+    const s = this.state.saved;
+    this.setState({ saved: s.includes(id) ? s.filter(x => x !== id) : [...s, id] });
+  }
+
+  vm(c) {
+    const saved = this.state.saved.includes(c.id);
+    const b = c.bd ? this.badgeMap[c.bd] : null;
+    return {
+      ...c,
+      title: c.mk + ' ' + c.md,
+      sub: c.yr + ' · ' + c.mi + ' тис. миль · ' + c.fu,
+      priceFmt: this.money(c.pr),
+      opFmt: c.op ? this.money(c.op) : null,
+      hasImg: !!c.img, noImg: !c.img,
+      ph: (c.mk + ' ' + c.md).toUpperCase().slice(0, 18),
+      badge: c.bd ? c.bd.toUpperCase() : null,
+      badgeBg: b ? b[0] : '', badgeColor: b ? b[1] : '',
+      st: c.st.toUpperCase(),
+      stColor: c.st === 'В дорозі' ? '#FFB04C' : '#4CD97B',
+      saveFill: saved ? '#4CD97B' : 'none',
+      open: () => this.goCar(c.id),
+      toggleSave: (e) => { e.stopPropagation(); this.toggleSave(c.id); },
+      remove: () => this.toggleSave(c.id)
+    };
+  }
+
+  chip(label, active, onClick) {
+    return {
+      label, toggle: onClick, pick: onClick,
+      bg: active ? 'rgba(76,217,123,.14)' : 'transparent',
+      color: active ? '#4CD97B' : '#98A29C',
+      border: active ? 'rgba(76,217,123,.5)' : '#242927'
+    };
+  }
+
+  filtered() {
+    const s = this.state, q = s.fQ.trim().toLowerCase();
+    let list = this.cars.filter(c =>
+      c.pr <= s.priceMax * 1000 && c.yr >= s.yearMin && c.mi <= s.miMax &&
+      (s.cat === 'all' || c.cat === s.cat) &&
+      (s.fuels.length === 0 || s.fuels.includes(c.fu)) &&
+      (s.trans.length === 0 || s.trans.includes(c.tr)) &&
+      (s.statusF === 'all' || c.st === s.statusF) &&
+      (!q || (c.mk + ' ' + c.md).toLowerCase().includes(q))
+    );
+    const so = s.sort;
+    if (so === 'priceAsc') list.sort((a, b) => a.pr - b.pr);
+    if (so === 'priceDesc') list.sort((a, b) => b.pr - a.pr);
+    if (so === 'yearDesc') list.sort((a, b) => b.yr - a.yr);
+    if (so === 'miAsc') list.sort((a, b) => a.mi - b.mi);
+    return list;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+    const d = this.cars.find(c => c.id === s.detailId) || this.cars[0];
+    const dvm = this.vm(d);
+    const results = this.filtered().map(c => this.vm(c));
+    const savedCars = this.cars.filter(c => s.saved.includes(c.id)).slice(0, 4).map(c => this.vm(c));
+
+    // calculator
+    const financed = d.pr * (1 - s.downPct / 100);
+    const r = 0.119 / 12, m = s.months;
+    const monthly = financed > 0 ? financed * (r * Math.pow(1 + r, m)) / (Math.pow(1 + r, m) - 1) : 0;
+
+    // gallery
+    const thumbLabels = ['ЕКСТЕР\'ЄР', 'ІНТЕР\'ЄР', 'ЗЗАДУ', 'ДВИГУН', 'ДИСКИ'];
+    const dThumbs = thumbLabels.map((label, i) => ({
+      label, hasImg: i === 0 && !!d.img, noImg: !(i === 0 && d.img), img: d.img || '',
+      border: s.galIdx === i ? 'rgba(76,217,123,.7)' : '#242927',
+      pick: () => this.setState({ galIdx: i })
+    }));
+    const galOnPhoto = s.galIdx === 0 && !!d.img;
+
+    // contact steps
+    const stepLabels = ['ЗАПИТ', 'КОНТАКТИ', 'ГОТОВО'];
+    const stepBadges = stepLabels.map((label, i) => {
+      const on = s.cStep === i + 1, done = s.cStep > i + 1;
+      return {
+        idx: '0' + (i + 1), label, notLast: i < 2,
+        bg: on ? 'rgba(76,217,123,.14)' : 'transparent',
+        color: on || done ? '#4CD97B' : '#5C665F',
+        border: on ? 'rgba(76,217,123,.5)' : '#242927'
+      };
+    });
+    const types = [
+      { t: 'Перегляд авто', d: 'Живий огляд на майданчику або відеоогляд з менеджером.' },
+      { t: 'Підбір під бюджет', d: 'Знайдемо варіанти з аукціонів США під ваші критерії.' },
+      { t: 'Фінансування', d: 'Розстрочка від партнерських банків, розрахунок за 1 день.' },
+      { t: 'Резерв авто в дорозі', d: 'Забронюйте авто, яке вже пливе в Україну.' }
+    ];
+    const selCar = s.page === 'contact' && s.cFromCar ? this.cars.find(c => c.id === s.cFromCar) : null;
+
+    const catLabels = { all: 'Всі', sedan: 'Седан', suv: 'SUV', truck: 'Пікап', ev: 'Електро' };
+    const cnt = (k) => this.cars.filter(c => c.cat === k).length;
+
+    return {
+      motionStyle: null,
+      // shell
+      navLinks: [
+        { label: 'Головна', p: 'home' }, { label: 'Каталог', p: 'listing' },
+        { label: 'Збережені', p: 'saved', count: s.saved.length || null }, { label: 'Кабінет', p: 'account' }
+      ].map(l => ({
+        ...l, go: () => this.nav(l.p),
+        bg: s.page === l.p ? 'rgba(255,255,255,.06)' : 'transparent',
+        color: s.page === l.p ? '#F2F5F3' : '#98A29C'
+      })),
+      goHome: () => this.nav('home'),
+      goContact: () => this.nav('contact', { cStep: 1, cFromCar: null }),
+      goListingAll: () => this.nav('listing'),
+      goSaved: () => this.nav('saved'),
+      goAccount: () => this.nav('account'),
+      isHome: s.page === 'home', isListing: s.page === 'listing', isDetail: s.page === 'detail',
+      isSaved: s.page === 'saved', isContact: s.page === 'contact', isAccount: s.page === 'account',
+
+      // home
+      hQ: s.hQ, onHQ: set('hQ'), hYear: s.hYear, onHYear: set('hYear'), hPrice: s.hPrice, onHPrice: set('hPrice'),
+      heroSearch: () => this.nav('listing', { fQ: s.hQ, yearMin: +s.hYear, priceMax: +s.hPrice }),
+      heroStats: [
+        { n: '400+', l: 'АВТО ДОСТАВЛЕНО' }, { n: '6 років', l: 'НА РИНКУ' }, { n: '100%', l: 'СТРАХУВАННЯ' }
+      ],
+      catTiles: ['sedan', 'suv', 'truck', 'ev'].map((k, i) => ({
+        idx: '0' + (i + 1), label: { sedan: 'Седани', suv: 'SUV', truck: 'Пікапи', ev: 'Електро' }[k],
+        n: cnt(k), go: () => this.nav('listing', { cat: k })
+      })),
+      featured: [1, 2, 4].map(id => this.vm(this.cars.find(c => c.id === id))),
+      steps: [
+        { idx: '01', t: 'Заявка та підбір', d: 'Обговорюємо бюджет і критерії, показуємо реальні лоти з аукціонів.' },
+        { idx: '02', t: 'Перевірка та купівля', d: 'Звіт Carfax, фото з аукціону, ставки — все прозоро й з вами на звʼязку.' },
+        { idx: '03', t: 'Доставка та розмитнення', d: 'Морська доставка, брокер, сертифікація. Кожен етап видно у кабінеті.' },
+        { idx: '04', t: 'Видача під ключ', d: 'Авто на майданчику в Україні: перевірене, розмитнене, готове до реєстрації.' }
+      ],
+
+      // listing
+      resultCount: results.length, sort: s.sort, onSort: set('sort'),
+      fQ: s.fQ, onFQ: set('fQ'),
+      catOpts: ['all', 'sedan', 'suv', 'truck', 'ev'].map(k => this.chip(catLabels[k], s.cat === k, () => this.setState({ cat: k }))),
+      priceMax: s.priceMax, priceMaxFmt: '$' + s.priceMax + ' 000', onPriceMax: (e) => this.setState({ priceMax: +e.target.value }),
+      yearMin: s.yearMin, onYearMin: (e) => this.setState({ yearMin: +e.target.value }),
+      miMax: s.miMax, miMaxFmt: s.miMax + ' тис. миль', onMiMax: (e) => this.setState({ miMax: +e.target.value }),
+      fuelOpts: ['Бензин', 'Гібрид', 'Дизель', 'Електро'].map(f => this.chip(f, s.fuels.includes(f), () =>
+        this.setState({ fuels: s.fuels.includes(f) ? s.fuels.filter(x => x !== f) : [...s.fuels, f] }))),
+      transOpts: ['Автомат', 'Механіка'].map(t => this.chip(t, s.trans.includes(t), () =>
+        this.setState({ trans: s.trans.includes(t) ? s.trans.filter(x => x !== t) : [...s.trans, t] }))),
+      statusOpts: [['all', 'Усі'], ['В дорозі', 'В дорозі'], ['В Україні', 'В Україні']].map(([k, l]) =>
+        this.chip(l, s.statusF === k, () => this.setState({ statusF: k }))),
+      resetFilters: () => this.setState({ fQ: '', cat: 'all', priceMax: 65, yearMin: 2018, miMax: 60, fuels: [], trans: [], statusF: 'all' }),
+      hasResults: results.length > 0, noResults: results.length === 0, results,
+
+      // detail
+      dTitle: dvm.title, dTitleUp: dvm.title.toUpperCase(),
+      dHasImg: galOnPhoto, dNoImg: !galOnPhoto, dImg: d.img || '',
+      dGalLabel: (dvm.ph + ' · ' + thumbLabels[s.galIdx]),
+      dBadge: dvm.badge, dBadgeBg: dvm.badgeBg, dBadgeColor: dvm.badgeColor,
+      dThumbs, dVin: d.vin,
+      vinChecks: ['Юридична чистота — підтверджено', 'Без ДТП за звітом Carfax', 'Пробіг підтверджено (одометр)', d.st === 'В дорозі' ? 'Фото з аукціону — в наявності' : 'Огляд на майданчику — доступний'],
+      dSpecs: [
+        { k: 'Марка / модель', v: dvm.title }, { k: 'Рік', v: d.yr },
+        { k: 'Пробіг', v: d.mi + ' тис. миль' }, { k: 'Двигун', v: d.en },
+        { k: 'Паливо', v: d.fu }, { k: 'Коробка', v: d.tr },
+        { k: 'Привід', v: d.dr }, { k: 'Колір', v: d.clr },
+        { k: 'Локація', v: d.loc }, { k: 'VIN', v: d.vin.slice(0, 11) + '···' }
+      ],
+      dStColor: dvm.stColor, dSt: dvm.st + ' · ' + d.loc.toUpperCase(),
+      dPriceFmt: dvm.priceFmt, dOpFmt: dvm.opFmt,
+      dKeySpecs: [
+        { k: 'РІК', v: d.yr }, { k: 'ПРОБІГ', v: d.mi + 'k mi' }, { k: 'ПАЛИВО', v: d.fu },
+        { k: 'КОРОБКА', v: d.tr }, { k: 'ПРИВІД', v: d.dr.split(' ')[0] }, { k: 'ДВИГУН', v: d.en.split('·')[0].trim() }
+      ],
+      dContact: () => this.nav('contact', { cStep: 1, cType: 'Перегляд авто', cFromCar: d.id }),
+      dToggleSave: () => this.toggleSave(d.id),
+      dSaveLabel: s.saved.includes(d.id) ? '✓ Збережено' : 'Зберегти для порівняння',
+      downPct: s.downPct, onDown: (e) => this.setState({ downPct: +e.target.value }),
+      downFmt: s.downPct + '% · ' + this.money(Math.round(d.pr * s.downPct / 100)),
+      months: s.months, onMonths: (e) => this.setState({ months: +e.target.value }),
+      monthlyFmt: this.money(Math.round(monthly)) + '/міс',
+      similar: this.cars.filter(c => c.cat === d.cat && c.id !== d.id).slice(0, 3).map(c => this.vm(c)),
+
+      // saved
+      hasSaved: savedCars.length > 0, noSaved: savedCars.length === 0, savedCars,
+      cmpCols: '150px repeat(' + Math.max(savedCars.length, 1) + ', 1fr)',
+      compareRows: ['Ціна', 'Рік', 'Пробіг', 'Паливо', 'Двигун', 'Коробка', 'Привід', 'Статус'].map(label => ({
+        label,
+        vals: savedCars.map(c => ({
+          'Ціна': c.priceFmt, 'Рік': String(c.yr), 'Пробіг': c.mi + ' тис. миль', 'Паливо': c.fu,
+          'Двигун': c.en, 'Коробка': c.tr, 'Привід': c.dr, 'Статус': c.st
+        })[label])
+      })),
+
+      // contact
+      cStep1: s.cStep === 1, cStep2: s.cStep === 2, cStep3: s.cStep === 3,
+      stepBadges,
+      selCarChip: selCar ? selCar.mk + ' ' + selCar.md + ' · ' + this.money(selCar.pr) : null,
+      typeOpts: types.map(t => ({
+        ...t, pick: () => this.setState({ cType: t.t }),
+        bg: s.cType === t.t ? 'rgba(76,217,123,.08)' : '#121514',
+        border: s.cType === t.t ? 'rgba(76,217,123,.55)' : '#242927'
+      })),
+      next1Op: s.cType ? 1 : 0.45,
+      next1: () => { if (s.cType) this.setState({ cStep: 2, cErr: '' }); },
+      cName: s.cName, onCName: set('cName'), cPhone: s.cPhone, onCPhone: set('cPhone'),
+      cNote: s.cNote, onCNote: set('cNote'), cErr: s.cErr,
+      msgrOpts: ['Telegram', 'Viber', 'Дзвінок'].map(m => this.chip(m, s.cMsgr === m, () => this.setState({ cMsgr: m }))),
+      back2: () => this.setState({ cStep: 1 }),
+      submit: () => {
+        if (!s.cName.trim() || s.cPhone.trim().length < 9) {
+          this.setState({ cErr: 'Вкажіть ім\'я та коректний номер телефону — інакше не зможемо звʼязатися.' });
+          return;
+        }
+        const id = 'SVB-2607-' + (140 + s.myRequests.length);
+        this.setState({
+          cStep: 3, cErr: '', reqId: id,
+          myRequests: [{ id, title: s.cType + (selCar ? ' · ' + selCar.mk + ' ' + selCar.md : ''), status: 'НОВА', done: false }, ...s.myRequests]
+        });
+        window.scrollTo(0, 0);
+      },
+      reqId: s.reqId,
+
+      // account
+      accSavedCount: s.saved.length, accReqCount: s.myRequests.length,
+      notifOpts: [['price', 'Зниження ціни на збережені авто'], ['fresh', 'Нові авто за моїми пошуками'], ['status', 'Зміна статусу доставки']].map(([k, label]) => ({
+        label, on: s.notif[k],
+        trackBg: s.notif[k] ? '#2FA35B' : '#242927',
+        knobLeft: s.notif[k] ? '18px' : '2px',
+        toggle: () => this.setState({ notif: { ...s.notif, [k]: !s.notif[k] } })
+      })),
+      savedSearches: s.savedSearches.map((ss, i) => ({
+        ...ss, go: () => this.nav('listing'),
+        remove: () => this.setState({ savedSearches: s.savedSearches.filter((_, j) => j !== i) })
+      })),
+      myRequests: s.myRequests.map(r => ({
+        ...r,
+        stBg: r.status === 'НОВА' ? 'rgba(125,184,255,.14)' : 'rgba(255,176,76,.14)',
+        stColor: r.status === 'НОВА' ? '#7DB8FF' : '#FFB04C'
+      })),
+      hasHist: s.history.length > 0, noHist: s.history.length === 0,
+      histCars: s.history.map(id => this.vm(this.cars.find(c => c.id === id)))
+    };
+  }
+}
+</script>
+</body>
+</html>
