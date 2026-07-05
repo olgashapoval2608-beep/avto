@@ -23,6 +23,41 @@
     @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.35}}
     [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
     [data-reveal].rv{opacity:1;transform:none}
+
+    @media (max-width:760px){
+      header > div{padding-left:20px!important;padding-right:20px!important;height:56px!important;gap:14px!important}
+      header > div > div > span:last-child{display:none!important}
+      header nav{overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+      header nav::-webkit-scrollbar{display:none}
+      header nav button{white-space:nowrap;flex-shrink:0;padding:7px 10px!important;font-size:13px!important}
+      header > div > button{padding:8px 14px!important;font-size:13px!important;white-space:nowrap}
+      footer > div{padding-left:20px!important;padding-right:20px!important}
+      .page-main{padding-left:20px!important;padding-right:20px!important}
+
+      .pad-section{padding-left:20px!important;padding-right:20px!important}
+      .sec-head{flex-wrap:wrap;gap:8px}
+      .hero-wrap{padding-left:20px!important;padding-right:20px!important}
+      .hero-wrap h1{font-size:34px!important}
+      .hero-search{flex-direction:column!important}
+      .hero-search button{width:100%!important;align-self:stretch!important}
+      .hero-stats{gap:22px!important;flex-wrap:wrap!important}
+
+      .grid-4, .grid-3{grid-template-columns:1fr!important}
+      .grid-sidebar{grid-template-columns:1fr!important}
+      .grid-sidebar aside{position:static!important}
+      .grid-detail{grid-template-columns:1fr!important}
+      .grid-thumbs{grid-template-columns:repeat(3,1fr)!important}
+      .grid-specs{grid-template-columns:1fr!important}
+      .grid-keyspecs{grid-template-columns:repeat(2,1fr)!important}
+      .grid-account{grid-template-columns:1fr!important}
+      .grid-2{grid-template-columns:1fr!important}
+
+      .cta-band{flex-direction:column!important;align-items:flex-start!important;padding:32px 24px!important}
+      .cta-band button{width:100%!important}
+
+      .cmp-wrap{overflow-x:auto!important}
+      .cmp-row{min-width:520px}
+    }
   </style>
 </helmet>
 
@@ -59,7 +94,7 @@
         <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,13,12,.85) 0%,rgba(11,13,12,.4) 45%,rgba(11,13,12,.1) 100%)"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,12,.5) 0%,rgba(11,13,12,0) 30%,rgba(11,13,12,.35) 75%,#0B0D0C 100%)"></div>
 
-        <div style="position:relative;max-width:1280px;margin:0 auto;padding:0 32px 52px;width:100%">
+        <div class="hero-wrap" style="position:relative;max-width:1280px;margin:0 auto;padding:0 32px 52px;width:100%">
           <div style="max-width:640px">
             <div style="display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;color:#4CD97B;border:1px solid rgba(76,217,123,.3);border-radius:20px;padding:7px 16px;background:rgba(76,217,123,.08);animation:fadeUp .8s .1s cubic-bezier(.2,.7,.2,1) both">
               <span style="width:6px;height:6px;border-radius:50%;background:#4CD97B;animation:dotPulse 2s infinite"></span>
@@ -69,7 +104,7 @@
             <p style="font-size:17px;line-height:1.6;color:#B9C3BD;margin:0 0 8px;max-width:460px;animation:fadeUp .8s .4s cubic-bezier(.2,.7,.2,1) both">Підбір, перевірка, доставка та розмитнення. Ви бачите кожен етап і кожен долар у ціні.</p>
           </div>
 
-          <div style="margin-top:34px;background:rgba(17,21,19,.86);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;display:flex;gap:12px;align-items:stretch;animation:fadeUp .8s .55s cubic-bezier(.2,.7,.2,1) both;box-shadow:0 32px 64px -32px rgba(0,0,0,.8)">
+          <div class="hero-search" style="margin-top:34px;background:rgba(17,21,19,.86);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;display:flex;gap:12px;align-items:stretch;animation:fadeUp .8s .55s cubic-bezier(.2,.7,.2,1) both;box-shadow:0 32px 64px -32px rgba(0,0,0,.8)">
             <div style="flex:1.4;display:flex;flex-direction:column;gap:6px">
               <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">МАРКА / МОДЕЛЬ</label>
               <input value="{{ hQ }}" onChange="{{ onHQ }}" placeholder="Напр., Mazda 3" style="background:#0B0D0C;border:1px solid #242927;border-radius:10px;padding:12px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px;transition:border-color .2s">
@@ -89,7 +124,7 @@
             <button onClick="{{ heroSearch }}" style="align-self:flex-end;border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#08110B;background:linear-gradient(135deg,#4CD97B,#2FA35B);padding:0 34px;height:45px;border-radius:10px;transition:transform .25s,box-shadow .25s;white-space:nowrap" style-hover="transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(76,217,123,.5)">Знайти авто</button>
           </div>
 
-          <div style="display:flex;gap:40px;margin-top:26px;animation:fadeUp .8s .7s cubic-bezier(.2,.7,.2,1) both">
+          <div class="hero-stats" style="display:flex;gap:40px;margin-top:26px;animation:fadeUp .8s .7s cubic-bezier(.2,.7,.2,1) both">
             <sc-for list="{{ heroStats }}" as="st" hint-placeholder-count="3">
               <div style="display:flex;flex-direction:column;gap:2px">
                 <span style="font-size:26px;font-weight:800;letter-spacing:-.5px">{{ st.n }}</span>
@@ -100,12 +135,12 @@
         </div>
       </section>
 
-      <section style="max-width:1280px;margin:0 auto;padding:72px 32px 0">
-        <div data-reveal style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
+      <section class="pad-section" style="max-width:1280px;margin:0 auto;padding:72px 32px 0">
+        <div data-reveal class="sec-head" style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
           <h2 style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin:0">Категорії</h2>
           <button onClick="{{ goListingAll }}" style="border:none;background:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1.5px;color:#4CD97B;padding:0" style-hover="text-decoration:underline">УВЕСЬ КАТАЛОГ →</button>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+        <div class="grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
           <sc-for list="{{ catTiles }}" as="ct" hint-placeholder-count="4">
             <div data-reveal onClick="{{ ct.go }}" style="background:#121514;border:1px solid #242927;border-radius:16px;padding:24px;cursor:pointer;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s" style-hover="transform:translateY(-4px);border-color:rgba(76,217,123,.4)">
               <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C665F;letter-spacing:2px">{{ ct.idx }}</div>
@@ -116,12 +151,12 @@
         </div>
       </section>
 
-      <section style="max-width:1280px;margin:0 auto;padding:72px 32px 0">
-        <div data-reveal style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
+      <section class="pad-section" style="max-width:1280px;margin:0 auto;padding:72px 32px 0">
+        <div data-reveal class="sec-head" style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
           <h2 style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin:0">Рекомендовані</h2>
           <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:#5C665F">ПЕРЕВІРЕНІ МЕНЕДЖЕРОМ</span>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+        <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
           <sc-for list="{{ featured }}" as="car" hint-placeholder-count="3">
             <div data-reveal>
               <dc-import name="CarCard" car="{{ car }}" hint-size="100%,330px"></dc-import>
@@ -130,9 +165,9 @@
         </div>
       </section>
 
-      <section style="max-width:1280px;margin:0 auto;padding:88px 32px 0">
+      <section class="pad-section" style="max-width:1280px;margin:0 auto;padding:88px 32px 0">
         <h2 data-reveal style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin:0 0 24px">Як це працює</h2>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+        <div class="grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
           <sc-for list="{{ steps }}" as="sp" hint-placeholder-count="4">
             <div data-reveal style="background:#121514;border:1px solid #242927;border-radius:16px;padding:24px;position:relative;overflow:hidden">
               <div style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:600;color:rgba(76,217,123,.14);position:absolute;top:10px;right:16px">{{ sp.idx }}</div>
@@ -144,8 +179,8 @@
         </div>
       </section>
 
-      <section style="max-width:1280px;margin:0 auto;padding:88px 32px 8px">
-        <div data-reveal style="background:linear-gradient(135deg,#10241A,#0D1712);border:1px solid rgba(76,217,123,.25);border-radius:22px;padding:52px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+      <section class="pad-section" style="max-width:1280px;margin:0 auto;padding:88px 32px 8px">
+        <div data-reveal class="cta-band" style="background:linear-gradient(135deg,#10241A,#0D1712);border:1px solid rgba(76,217,123,.25);border-radius:22px;padding:52px;display:flex;align-items:center;justify-content:space-between;gap:32px">
           <div>
             <h2 style="font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 10px">Не знайшли своє авто?</h2>
             <p style="font-size:15px;color:#98A29C;margin:0;max-width:480px;line-height:1.6">Залиште запит — підберемо варіанти з аукціонів США під ваш бюджет протягом 24 годин.</p>
@@ -158,8 +193,8 @@
 
   <!-- ============ LISTING ============ -->
   <sc-if value="{{ isListing }}" hint-placeholder-val="{{ false }}">
-    <main data-screen-label="Catalog / Listing" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px">
+    <main data-screen-label="Catalog / Listing" class="page-main" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+      <div class="sec-head" style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;margin-bottom:8px">ГОЛОВНА / КАТАЛОГ</div>
           <h1 style="font-size:34px;font-weight:800;letter-spacing:-1px;margin:0">Каталог авто</h1>
@@ -176,7 +211,7 @@
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:264px 1fr;gap:28px;align-items:start">
+      <div class="grid-sidebar" style="display:grid;grid-template-columns:264px 1fr;gap:28px;align-items:start">
         <aside style="background:#121514;border:1px solid #242927;border-radius:16px;padding:22px;position:sticky;top:92px;display:flex;flex-direction:column;gap:22px">
           <div style="display:flex;flex-direction:column;gap:8px">
             <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ПОШУК</label>
@@ -240,7 +275,7 @@
 
         <div>
           <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+            <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
               <sc-for list="{{ results }}" as="car" hint-placeholder-count="6">
                 <dc-import name="CarCard" car="{{ car }}" hint-size="100%,330px"></dc-import>
               </sc-for>
@@ -264,10 +299,10 @@
 
   <!-- ============ DETAIL ============ -->
   <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
-    <main data-screen-label="Product detail" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+    <main data-screen-label="Product detail" class="page-main" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
       <button onClick="{{ goListingAll }}" style="border:none;background:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;padding:0;margin-bottom:22px;transition:color .2s" style-hover="color:#4CD97B">← КАТАЛОГ / {{ dTitleUp }}</button>
 
-      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:start">
+      <div class="grid-detail" style="display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:start">
         <div>
           <div style="position:relative;height:440px;border-radius:18px;overflow:hidden;background:#0E100F;border:1px solid #242927">
             <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}">
@@ -282,7 +317,7 @@
               <span style="position:absolute;top:16px;left:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;font-weight:600;padding:6px 12px;border-radius:7px;backdrop-filter:blur(8px);background: {{ dBadgeBg }};color: {{ dBadgeColor }}">{{ dBadge }}</span>
             </sc-if>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px">
+          <div class="grid-thumbs" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px">
             <sc-for list="{{ dThumbs }}" as="th" hint-placeholder-count="5">
               <div onClick="{{ th.pick }}" style="height:66px;border-radius:10px;overflow:hidden;cursor:pointer;border:1.5px solid;transition:border-color .2s;border-color: {{ th.border }};background:#0E100F" style-hover="border-color:rgba(76,217,123,.6)">
                 <sc-if value="{{ th.hasImg }}" hint-placeholder-val="{{ false }}">
@@ -323,7 +358,7 @@
 
           <div data-reveal style="margin-top:20px;background:#121514;border:1px solid #242927;border-radius:18px;padding:26px">
             <div style="font-size:16px;font-weight:800;margin-bottom:12px">Повні специфікації</div>
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px">
+            <div class="grid-specs" style="display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px">
               <sc-for list="{{ dSpecs }}" as="sp" hint-placeholder-count="8">
                 <div style="display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #1C211E">
                   <span style="font-size:13px;color:#98A29C">{{ sp.k }}</span>
@@ -348,7 +383,7 @@
               </sc-if>
             </div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:#5C665F;margin-bottom:20px">ЦІНА ПІД КЛЮЧ В УКРАЇНІ</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+            <div class="grid-keyspecs" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
               <sc-for list="{{ dKeySpecs }}" as="ks" hint-placeholder-count="6">
                 <div style="background:#0B0D0C;border:1px solid #1C211E;border-radius:10px;padding:11px 12px">
                   <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#5C665F;margin-bottom:4px">{{ ks.k }}</div>
@@ -391,7 +426,7 @@
 
       <section style="margin-top:56px">
         <h2 data-reveal style="font-size:24px;font-weight:800;letter-spacing:-.5px;margin:0 0 20px">Схожі авто</h2>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+        <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
           <sc-for list="{{ similar }}" as="car" hint-placeholder-count="3">
             <dc-import name="CarCard" car="{{ car }}" hint-size="100%,330px"></dc-import>
           </sc-for>
@@ -402,13 +437,13 @@
 
   <!-- ============ SAVED ============ -->
   <sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}">
-    <main data-screen-label="Saved / Compare" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+    <main data-screen-label="Saved / Compare" class="page-main" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;margin-bottom:8px">ГОЛОВНА / ЗБЕРЕЖЕНІ</div>
       <h1 style="font-size:34px;font-weight:800;letter-spacing:-1px;margin:0 0 26px">Збережені авто</h1>
 
       <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ true }}">
-        <div style="background:#121514;border:1px solid #242927;border-radius:18px;overflow:hidden">
-          <div style="display:grid;padding:22px 26px;gap:16px;border-bottom:1px solid #1C211E;grid-template-columns: {{ cmpCols }}">
+        <div class="cmp-wrap" style="background:#121514;border:1px solid #242927;border-radius:18px;overflow:hidden">
+          <div class="cmp-row" style="display:grid;padding:22px 26px;gap:16px;border-bottom:1px solid #1C211E;grid-template-columns: {{ cmpCols }}">
             <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#5C665F;align-self:end">ПОРІВНЯННЯ</div>
             <sc-for list="{{ savedCars }}" as="sc" hint-placeholder-count="2">
               <div>
@@ -430,7 +465,7 @@
             </sc-for>
           </div>
           <sc-for list="{{ compareRows }}" as="row" hint-placeholder-count="8">
-            <div style="display:grid;padding:13px 26px;gap:16px;border-bottom:1px solid #141816;grid-template-columns: {{ cmpCols }}">
+            <div class="cmp-row" style="display:grid;padding:13px 26px;gap:16px;border-bottom:1px solid #141816;grid-template-columns: {{ cmpCols }}">
               <div style="font-size:13px;color:#98A29C">{{ row.label }}</div>
               <sc-for list="{{ row.vals }}" as="v">
                 <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#F2F5F3">{{ v }}</div>
@@ -456,7 +491,7 @@
 
   <!-- ============ CONTACT ============ -->
   <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
-    <main data-screen-label="Contact / Request flow" style="max-width:720px;margin:0 auto;padding:44px 32px 60px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+    <main data-screen-label="Contact / Request flow" class="page-main" style="max-width:720px;margin:0 auto;padding:44px 32px 60px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:30px">
         <sc-for list="{{ stepBadges }}" as="sb" hint-placeholder-count="3">
           <div style="display:flex;align-items:center;gap:10px">
@@ -475,7 +510,7 @@
             <span style="font-size:14px;font-weight:700">{{ selCarChip }}</span>
           </div>
         </sc-if>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div class="grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
           <sc-for list="{{ typeOpts }}" as="t" hint-placeholder-count="4">
             <div onClick="{{ t.pick }}" style="border-radius:14px;padding:20px;cursor:pointer;border:1px solid;transition:all .25s;background: {{ t.bg }};border-color: {{ t.border }}" style-hover="border-color:rgba(76,217,123,.55)">
               <div style="font-size:15.5px;font-weight:700;margin-bottom:5px">{{ t.t }}</div>
@@ -490,7 +525,7 @@
         <h1 style="font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 8px">Ваші контакти</h1>
         <p style="font-size:14.5px;color:#98A29C;margin:0 0 24px;line-height:1.6">Жодних розсилок — тільки відповідь по вашому запиту.</p>
         <div style="display:flex;flex-direction:column;gap:16px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <div style="display:flex;flex-direction:column;gap:7px">
               <label style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#8B968F">ІМ'Я *</label>
               <input value="{{ cName }}" onChange="{{ onCName }}" placeholder="Як до вас звертатися" style="background:#121514;border:1px solid #242927;border-radius:10px;padding:13px 14px;color:#F2F5F3;font-family:'Manrope',sans-serif;font-size:14px">
@@ -541,11 +576,11 @@
 
   <!-- ============ ACCOUNT ============ -->
   <sc-if value="{{ isAccount }}" hint-placeholder-val="{{ false }}">
-    <main data-screen-label="My Account" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
+    <main data-screen-label="My Account" class="page-main" style="max-width:1280px;margin:0 auto;padding:36px 32px 40px;animation:pageIn .5s cubic-bezier(.2,.7,.2,1)">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#5C665F;margin-bottom:8px">ГОЛОВНА / КАБІНЕТ</div>
       <h1 style="font-size:34px;font-weight:800;letter-spacing:-1px;margin:0 0 26px">Мій кабінет</h1>
 
-      <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start">
+      <div class="grid-account" style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start">
         <div style="display:flex;flex-direction:column;gap:18px">
           <div style="background:#121514;border:1px solid #242927;border-radius:18px;padding:26px;text-align:center">
             <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#10241A,#183A28);border:1px solid rgba(76,217,123,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;font-weight:800;color:#4CD97B">ОК</div>
