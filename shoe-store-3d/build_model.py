@@ -19,6 +19,7 @@ from build_model import box, cyl, sphere, prism_x, prism_y, mat, shade, place, n
 random.seed(360)
 H = 3.0
 WALL = 0.2
+LOW = 0.9                                    # занижені фасадна стіна і стіни нижньої правої ділянки
 bm.H = H
 MAIN_W, MAIN_D = 16.0, 18.5                  # основна частина
 PRJ_X0, PRJ_X1, PRJ_Y0 = 16.0, 22.0, 7.8     # виступ праворуч: X 16–22, Y 7,8–18,5
@@ -362,52 +363,41 @@ def floor_tiles(g, x0, y0, x1, y1):
 
 
 def build_shell():
-    g = new_group('Підлога торговельної зали', 'Будівля')
+    g = new_group('Підлога торговельної зали', 'Підлога')
     floor_tiles(g, 0, 0, MAIN_W, MAIN_D)
     floor_tiles(g, PRJ_X0, PRJ_Y0, PRJ_X1, MAIN_D)
     box(g, mat('Плита перекриття', '#8C8478'), -WALL, -WALL, -0.25, MAIN_W + WALL, MAIN_D + WALL, -0.02)
     box(g, mat('Плита перекриття', '#8C8478'), MAIN_W, PRJ_Y0 - WALL, -0.25, PRJ_X1 + WALL, MAIN_D + WALL, -0.02)
-    box(g, mat('Килимок', '#3D3D3D'), 7.95, 0.05, 0, 10.05, 1.6, 0.012, False)
-    g = new_group('Стіни', 'Будівля')
+    box(g, mat('Килимок', '#3D3D3D'), 8.0, 0.05, 0, 10.0, 1.6, 0.012, False)
+    g = new_group('Стіни', 'Стіни')
     box(g, M_WALL, -WALL, 0, 0, 0, MAIN_D + WALL, H)                          # ліва
     box(g, M_WALL, 0, MAIN_D, 0, PRJ_X1 + WALL, MAIN_D + WALL, H)             # верхня (тильна)
     box(g, M_WALL, PRJ_X1, PRJ_Y0 - WALL, 0, PRJ_X1 + WALL, MAIN_D, H)        # права стіна виступу
-    box(g, M_WALL, MAIN_W, PRJ_Y0 - WALL, 0, PRJ_X1, PRJ_Y0, H)               # нижня стіна виступу
-    box(g, M_WALL, MAIN_W, -WALL, 0, MAIN_W + WALL, PRJ_Y0 - WALL, H)         # права стіна нижньої ділянки
-    g = new_group('Фасад із вітринами і вхідною групою', 'Будівля')
-    for a, b in ((-WALL, 0.3), (7.6, 7.9), (10.1, 10.4), (15.7, MAIN_W + WALL)):
-        box(g, M_WALL_OUT, a, -WALL, 0, b, 0, H)
-    for a, b in ((0.3, 7.6), (10.4, 15.7)):
-        box(g, M_WALL_OUT, a, -WALL, 0, b, 0, 0.5)
-        box(g, M_WALL_OUT, a, -WALL, 2.6, b, 0, H)
-        n = max(1, round((b - a) / 1.8))
-        for i in range(n + 1):
-            xx = a + (b - a) * i / n
-            box(g, M_FRAME, xx - 0.04, -WALL, 0.5, xx + 0.04, -0.05, 2.6)
-        for i in range(n):
-            box(g, M_GLASS, a + (b - a) * i / n + 0.04, -0.13, 0.5, a + (b - a) * (i + 1) / n - 0.04, -0.11, 2.6)
-    box(g, M_WALL_OUT, 7.9, -WALL, 2.4, 10.1, 0, H)
-    box(g, M_FRAME, 7.9, -WALL, 2.32, 10.1, 0, 2.4)
-    box(g, M_FRAME, 8.97, -WALL, 0, 9.03, 0, 2.32)                            # розділення вхід/вихід
-    box(g, M_GLASS, 7.95, -0.16, 0.02, 8.4, -0.14, 2.32)
-    box(g, M_GLASS, 9.6, -0.16, 0.02, 10.05, -0.14, 2.32)
-    g = new_group('Вивіска «Взуття»', 'Навігація')
-    box(g, mat('Вивіска фон', '#7B1E3A'), 3.0, -WALL - 0.12, 2.65, 13.0, -WALL, 2.97)
-    bm.TEXTS.append(('ВЗУТТЯ ТА АКСЕСУАРИ', 8.0, -WALL - 0.125, 2.72, 0, 0.2, 'Вивіска', 'facade'))
-    bm.TEXTS.append(('ВХІД', 9.55, -WALL - 0.03, 2.43, 0, 0.12, 'Вивіска', 'facade'))
-    bm.TEXTS.append(('ВИХІД', 8.45, -WALL - 0.03, 2.43, 0, 0.12, 'Вивіска', 'facade'))
+    # для зручності огляду фасадну стіну і стіни нижньої правої ділянки знижено до 0,9 м (п. 2.3 курсової)
+    box(g, M_WALL, MAIN_W, PRJ_Y0 - WALL, 0, PRJ_X1 + WALL, PRJ_Y0, LOW)      # нижня стіна виступу
+    box(g, M_WALL, MAIN_W, -WALL, 0, MAIN_W + WALL, PRJ_Y0 - WALL, LOW)       # права стіна нижньої ділянки
+    g = new_group('Фасадна стіна з вхідною групою 2,0 м', 'Стіни')
+    for a, b in ((-WALL, 8.0), (10.0, MAIN_W + WALL)):
+        box(g, M_WALL_OUT, a, -WALL, 0, b, 0, LOW)
+    for xx in (8.0, 8.97, 9.94):                                              # стійки вхід / вихід
+        box(g, M_FRAME, xx, -WALL, 0, xx + 0.06, 0, LOW + 0.05)
+    box(g, M_GLASS, 8.06, -0.16, 0.02, 8.5, -0.14, LOW)                      # розсунуті стулки
+    box(g, M_GLASS, 9.5, -0.16, 0.02, 9.94, -0.14, LOW)
     mat('Вивіска', '#FFFFFF')
+    bm.TEXTS.append(('ВИХІД', 8.5, -WALL - 0.03, 0.5, 0, 0.12, 'Вивіска', 'facade'))
+    bm.TEXTS.append(('ВХІД', 9.47, -WALL - 0.03, 0.5, 0, 0.12, 'Вивіска', 'facade'))
     g = new_group('Тротуар', 'Благоустрій')
     box(g, M_PAVE, -1.0, -5.0, -0.25, MAIN_W + 1.0, -WALL, -0.03)
 
 
 def build_equipment():
-    T = 'Обладнання'
+    TAG = {'women': 'Жіночий відділ', 'men': 'Чоловічий відділ', 'kids': 'Дитячий відділ',
+           'access': 'Аксесуари і супутні товари', 'cash': 'Розрахунковий вузол', 'fit': 'Зона приміряння'}
     n = [0]
 
     def wall(x0, y0, facing, dept, label=''):
         n[0] += 1
-        place(f'1.{n[0]} Пристінна гірка — {DEPTS[dept][0]}{label}', T, x0, y0, 1.25, 0.6, facing, wall_hill, dept)
+        place(f'1.{n[0]} Пристінна гірка — {DEPTS[dept][0]}{label}', TAG[dept], x0, y0, 1.25, 0.6, facing, wall_hill, dept)
 
     for i in range(8):                                         # верхня стіна, ліва частина — жіноче
         wall(0.6 + i * 1.25, MAIN_D - 0.6, '-y', 'women', ' (зимові чоботи)')
@@ -428,45 +418,45 @@ def build_equipment():
     for y0 in (13.8, 9.8):
         for x0 in (2.8, 5.5, 8.2, 10.9, 13.6):
             k += 1
-            place(f'2.{k} Острівна гірка — Жіноче взуття', T, x0, y0, 1.5, 1.2, '-y', island_hill, 'women')
+            place(f'2.{k} Острівна гірка — Жіноче взуття', TAG['women'], x0, y0, 1.5, 1.2, '-y', island_hill, 'women')
     for y0 in (15.7, 13.3, 10.9):
         k += 1
-        place(f'2.{k} Острівна гірка — Чоловіче взуття', T, 17.3, y0, 1.5, 1.2, '-y', island_hill, 'men')
+        place(f'2.{k} Острівна гірка — Чоловіче взуття', TAG['men'], 17.3, y0, 1.5, 1.2, '-y', island_hill, 'men')
     for x0 in (6.6, 9.3):
         k += 1
-        place(f'2.{k} Острівна гірка — Дитяче взуття', T, x0, 6.0, 1.5, 1.2, '-y', island_hill, 'kids')
+        place(f'2.{k} Острівна гірка — Дитяче взуття', TAG['kids'], x0, 6.0, 1.5, 1.2, '-y', island_hill, 'kids')
     # 3. Столи-гірки для дитячого взуття
     for i, x0 in enumerate((3.0, 4.6)):
-        place(f'3.{i + 1} Стіл-гірка — Дитяче взуття', T, x0, 6.0, 1.2, 0.6, '-y', kids_table)
+        place(f'3.{i + 1} Стіл-гірка — Дитяче взуття', TAG['kids'], x0, 6.0, 1.2, 0.6, '-y', kids_table)
     # 4. Подіуми для промо-викладки
-    place('4.1 Подіум — Жіноче взуття (новинки)', T, 5.0, 16.0, 1.6, 0.8, '-y', podium, 'women')
-    place('4.2 Подіум — Чоловіче спортивне взуття', T, 17.3, 9.2, 1.6, 0.8, '-y', podium, 'men')
-    place('4.3 Подіум — Новинки сезону біля входу', T, 10.6, 3.2, 1.6, 0.8, '-y', podium, 'women')
+    place('4.1 Подіум — Жіноче взуття (новинки)', TAG['women'], 5.0, 16.0, 1.6, 0.8, '-y', podium, 'women')
+    place('4.2 Подіум — Чоловіче спортивне взуття', TAG['men'], 17.3, 9.2, 1.6, 0.8, '-y', podium, 'men')
+    place('4.3 Подіум — Новинки сезону біля входу', TAG['women'], 10.6, 3.2, 1.6, 0.8, '-y', podium, 'women')
     # 5. Скляні вітрини для аксесуарів (фасадна стіна)
     for i in range(4):
-        place(f'5.{i + 1} Скляна вітрина — Аксесуари', T, 11.0 + i * 1.0, 0.0, 1.0, 0.5, '+y', glass_vitrine)
+        place(f'5.{i + 1} Скляна вітрина — Аксесуари', TAG['access'], 11.0 + i * 1.0, 0.0, 1.0, 0.5, '+y', glass_vitrine)
     # 6. Острівні вітрини-прилавки для сумок
-    place('6.1 Вітрина-прилавок — Сумки', T, 11.4, 5.2, 1.2, 1.2, '-y', bag_counter)
-    place('6.2 Вітрина-прилавок — Сумки', T, 13.2, 3.0, 1.2, 1.2, '-y', bag_counter)
+    place('6.1 Вітрина-прилавок — Сумки', TAG['access'], 11.4, 5.2, 1.2, 1.2, '-y', bag_counter)
+    place('6.2 Вітрина-прилавок — Сумки', TAG['access'], 13.2, 3.0, 1.2, 1.2, '-y', bag_counter)
     # 7. Обертові стійки і 8. стійка для засобів догляду
     for i, x0 in enumerate((3.6, 5.6, 7.6)):
-        place(f'7.{i + 1} Обертова стійка — Шкарпетки, панчохи', T, x0, 4.3, 0.6, 0.6, '-y', spinner)
-    place('8.1 Стійка — Засоби догляду за взуттям', T, 2.6, 2.9, 0.6, 0.4, '+y', care_stand)
+        place(f'7.{i + 1} Обертова стійка — Шкарпетки, панчохи', TAG['cash'], x0, 4.3, 0.6, 0.6, '-y', spinner)
+    place('8.1 Стійка — Засоби догляду за взуттям', TAG['cash'], 2.6, 2.9, 0.6, 0.4, '+y', care_stand)
     # 9. Банкетки і 10. дзеркала
     ban = [(3.0, 12.1, 1.2, 0.45, '-y'), (8.0, 12.1, 1.2, 0.45, '-y'), (12.4, 12.1, 1.2, 0.45, '-y'),
            (1.4, 7.8, 0.45, 1.2, '+x'), (1.5, 5.2, 1.2, 0.45, '+y'), (20.0, 14.2, 0.45, 1.2, '-x'),
            (20.0, 11.6, 0.45, 1.2, '-x')]
     for i, (x0, y0, a, b, f) in enumerate(ban):
-        place(f'9.{i + 1} Банкетка для приміряння', T, x0, y0, 1.2, 0.45, f, banquette)
+        place(f'9.{i + 1} Банкетка для приміряння', TAG['fit'], x0, y0, 1.2, 0.45, f, banquette)
     mir = [(4.6, 12.2, '-y'), (9.6, 12.2, '-y'), (14.0, 12.2, '-y'), (1.4, 9.2, '+x'), (2.9, 5.2, '+y'),
            (20.0, 15.5, '-x'), (20.0, 12.9, '-x')]
     for i, (x0, y0, f) in enumerate(mir):
-        place(f'10.{i + 1} Підлогове дзеркало', T, x0, y0, 0.6, 0.3, f, mirror)
+        place(f'10.{i + 1} Підлогове дзеркало', TAG['fit'], x0, y0, 0.6, 0.3, f, mirror)
     # 11. Касові столи (3) і 12. стелажі касової зони (2)
     for i, x0 in enumerate((3.4, 5.0, 6.6)):
-        place(f'11.{i + 1} Касовий стіл (робоче місце касира {i + 1})', T, x0, 2.8, 1.6, 0.7, '+y', cash_table)
+        place(f'11.{i + 1} Касовий стіл (робоче місце касира {i + 1})', TAG['cash'], x0, 2.8, 1.6, 0.7, '+y', cash_table)
     for i, x0 in enumerate((4.0, 6.0)):
-        place(f'12.{i + 1} Стелаж касової зони', T, x0, 0.0, 1.2, 0.4, '+y', cash_rack)
+        place(f'12.{i + 1} Стелаж касової зони', TAG['cash'], x0, 0.0, 1.2, 0.4, '+y', cash_rack)
 
 
 def sign(g, dept, cx, cy, width, along, z=2.4):
@@ -518,7 +508,7 @@ def main():
     build_shell()
     build_equipment()
     build_navigation()
-    eq = [g for g in bm.GROUPS if g.tag == 'Обладнання']
+    eq = [g for g in bm.GROUPS if g.name[:1].isdigit()]
     print(f'Груп: {len(bm.GROUPS)}, одиниць обладнання: {len(eq)}, полігонів: {sum(g.nfaces() for g in bm.GROUPS)}')
     dae = os.path.join(HERE, 'vzuttia.dae')
     rb = os.path.join(HERE, 'vzuttia.rb')

@@ -23,6 +23,7 @@ from build_model import box, cyl, sphere, prism_x, prism_y, mat, shade, place, n
 random.seed(637)
 L, D_HALL, D_ALL, H = 25.0, 16.0, 25.0, 3.6
 WALL = 0.2
+LOW = 1.0                                                     # занижені стіни
 bm.H = H                                                      # для підвісних табличок
 
 # ---------------------------------------------------------------- матеріали
@@ -592,8 +593,6 @@ def build_back_rooms():
     box(g, M_METAL, 3.8, 19.3, 0, 4.8, 20.3, 0.08); box(g, M_DARK, 4.6, 19.3, 0.08, 4.65, 20.3, 1.0)
     box(g, mat('Гідравлічний візок', '#F39C12'), 3.9, 17.2, 0, 4.5, 18.4, 0.12)
     cyl(g, M_DARK, (4.2, 18.45, 0.12), 0.02, 1.0, 'z', 6)
-    g = new_group('Ворота рампи', 'Будівля')
-    box(g, mat('Секційні ворота', '#7F8C8D'), -WALL - 0.02, 17.8, 0, -WALL, 20.2, 2.8)
     g = new_group('Тарна: ящики і контейнери', 'Підсобні приміщення')
     for i in range(6):
         for j in range(2):
@@ -659,46 +658,56 @@ def build_shell():
                    [(i, j, 0), (i + 1, j, 0), (i + 1, j + 1, 0), (i, j + 1, 0)])
     box(g, mat('Фундаментна плита', '#8C8478'), -WALL, -WALL, -0.3, L + WALL, D_ALL + WALL, -0.03)
     g = new_group('Зовнішні стіни (сендвіч-панелі)', 'Будівля')
-    box(g, M_PANEL_OUT, -WALL, 0, 0, 0, 17.8, H)                          # ліва (з воротами рампи)
-    box(g, M_PANEL_OUT, -WALL, 20.2, 0, 0, D_ALL + WALL, H)
-    box(g, M_PANEL_OUT, -WALL, 17.8, 2.8, 0, 20.2, H)
-    box(g, M_PANEL_OUT, L, 0, 0, L + WALL, D_ALL + WALL, H)               # права
-    box(g, M_PANEL_OUT, 0, D_ALL, 0, L, D_ALL + WALL, H)                  # тильна
-    # фасад-вітраж: вихід 14,9–17,08 м, вхід через тамбур 20,9–24,08 м
-    g = new_group('Фасад-вітраж', 'Будівля')
-    solid_low = [(-WALL, 14.9), (17.08, 20.9), (24.08, L + WALL)]
-    for a, b in solid_low:
-        box(g, M_PANEL_OUT, a, -WALL, 0, b, 0, 0.3)
-        box(g, M_PANEL_OUT, a, -WALL, 3.0, b, 0, H)
-        n = max(1, int((b - a) / 1.5))
-        for i in range(n + 1):
-            xx = a + (b - a) * i / n
-            box(g, M_FRAME, xx - 0.04, -WALL, 0.3, xx + 0.04, -0.05, 3.0)
-        for i in range(n):
-            box(g, M_GLASS, a + (b - a) * i / n + 0.04, -0.13, 0.3, a + (b - a) * (i + 1) / n - 0.04, -0.11, 3.0)
+    # для зручності огляду передні та бокові стіни занижено до LOW, покрівлю не показано (п. 4.1 курсової)
+    box(g, M_PANEL_OUT, -WALL, 0, 0, 0, D_ALL + WALL, LOW)                # ліва
+    box(g, M_PANEL_OUT, L, 0, 0, L + WALL, D_ALL + WALL, LOW)             # права
+    box(g, M_PANEL_OUT, 0, D_ALL, 0, L, D_ALL + WALL, H)                  # тильна (повна висота)
+    # фасад: вихід 14,9–17,08 м, вхід через тамбур 20,9–24,08 м
+    g = new_group('Фасад (занижений)', 'Будівля')
+    for a, b in [(-WALL, 14.9), (17.08, 20.9), (24.08, L + WALL)]:
+        box(g, M_PANEL_OUT, a, -WALL, 0, b, 0, LOW)
+        box(g, M_FRAME, a, -WALL, LOW, b, 0, LOW + 0.04)
     for a, b in ((14.9, 17.08), (20.9, 24.08)):
-        box(g, M_PANEL_OUT, a, -WALL, 2.5, b, 0, H)
-        box(g, M_FRAME, a, -WALL, 2.42, b, 0, 2.5)
-        box(g, M_GLASS, a + 0.05, -0.17, 0.02, a + 0.6, -0.15, 2.42)       # розсунуті стулки
-        box(g, M_GLASS, b - 0.6, -0.17, 0.02, b - 0.05, -0.15, 2.42)
+        for xx in (a, b - 0.06):
+            box(g, M_FRAME, xx, -WALL, 0, xx + 0.06, 0, LOW + 0.04)
+        box(g, M_GLASS, a + 0.06, -0.16, 0.02, a + 0.6, -0.14, LOW)       # розсунуті стулки
+        box(g, M_GLASS, b - 0.6, -0.16, 0.02, b - 0.06, -0.14, LOW)
     # тамбур 4,0 × 3,0 м
     g = new_group('Тамбур', 'Будівля')
     for xx in (20.5, 24.42):
         box(g, M_FRAME, xx, -3.0, 0, xx + 0.08, -WALL, 0.1)
-        box(g, M_GLASS, xx + 0.02, -3.0, 0.1, xx + 0.06, -WALL, 2.8)
-        box(g, M_FRAME, xx, -3.0, 2.8, xx + 0.08, -WALL, 3.0)
+        box(g, M_GLASS, xx + 0.02, -3.0, 0.1, xx + 0.06, -WALL, LOW)
+        box(g, M_FRAME, xx, -3.0, LOW, xx + 0.08, -WALL, LOW + 0.04)
     for a, b in ((20.5, 21.45), (23.5, 24.5)):
-        box(g, M_GLASS, a, -3.02, 0.1, b, -2.98, 2.8)
-    box(g, M_FRAME, 20.5, -3.08, 2.5, 24.5, -2.92, 3.0)
-    box(g, M_PANEL_OUT, 20.5, -3.0, 3.0, 24.5, -WALL, 3.1)
+        box(g, M_GLASS, a, -3.02, 0.1, b, -2.98, LOW)
+        box(g, M_FRAME, a, -3.06, LOW, b, -2.94, LOW + 0.04)
     box(g, mat('Килимок', '#3D3D3D'), 20.7, -2.8, 0, 24.3, -0.4, 0.015)
-    # вивіска
-    g = new_group('Вивіска «Продовольчі товари»', 'Навігація')
-    box(g, mat('Вивіска фон', '#2E7D32'), 4.0, -WALL - 0.12, 3.05, 13.5, -WALL, 3.5)
-    bm.TEXTS.append(('ПРОДОВОЛЬЧІ ТОВАРИ', 8.75, -WALL - 0.125, 3.12, 0, 0.3, 'Вивіска', 'facade'))
-    bm.TEXTS.append(('ВХІД', 22.5, -3.1, 2.56, 0, 0.18, 'Вивіска', 'facade'))
-    bm.TEXTS.append(('ВИХІД', 15.99, -WALL - 0.03, 2.58, 0, 0.16, 'Вивіска', 'facade'))
     mat('Вивіска', '#FFFFFF')
+    bm.TEXTS.append(('ВХІД', 22.98, -3.08, 0.55, 0, 0.18, 'Вивіска', 'facade'))
+    bm.TEXTS.append(('ВИХІД', 15.99, -WALL - 0.03, 0.55, 0, 0.16, 'Вивіска', 'facade'))
+
+
+def build_route():
+    """Основний маршрут покупців (рис. 3.2) — пунктирні стрілки на підлозі."""
+    g = new_group('Маршрут покупців (стрілки на підлозі)', 'Навігація')
+    red = mat('Маршрут покупців', '#C0392B')
+    pts = [(22.6, -2.4), (22.6, 12.6), (1.65, 12.6), (1.65, 4.0), (5.6, 4.0)]
+    t, z = 0.06, 0.006
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        dx, dy = x1 - x0, y1 - y0
+        ln = (dx * dx + dy * dy) ** 0.5
+        ux, uy = dx / ln, dy / ln
+        s = 0.3
+        while s < ln - 0.9:
+            ax, ay = x0 + ux * s, y0 + uy * s
+            bx, by = x0 + ux * min(s + 0.5, ln), y0 + uy * min(s + 0.5, ln)
+            box(g, red, min(ax, bx) - (t if uy else 0), min(ay, by) - (t if ux else 0), 0.001,
+                max(ax, bx) + (t if uy else 0), max(ay, by) + (t if ux else 0), z, False)
+            s += 0.8
+        hx, hy = x1 - ux * 0.25, y1 - uy * 0.25                      # стрілка
+        px, py = -uy, ux
+        g.poly(red, [(x1 - ux * 0.05, y1 - uy * 0.05, z), (hx - ux * 0.35 + px * 0.25, hy - uy * 0.35 + py * 0.25, z),
+                     (hx - ux * 0.35 - px * 0.25, hy - uy * 0.35 - py * 0.25, z)][::(1 if (ux * py - uy * px) > 0 else -1)])
 
 
 def build_site():
@@ -837,6 +846,7 @@ def main():
     build_back_rooms()
     build_site()
     build_navigation()
+    build_route()
     eq = [g for g in bm.GROUPS if g.tag == 'Обладнання']
     print(f'Груп: {len(bm.GROUPS)}, одиниць обладнання: {len(eq)}, полігонів: {sum(g.nfaces() for g in bm.GROUPS)}')
     dae = os.path.join(HERE, 'aero_express.dae')
