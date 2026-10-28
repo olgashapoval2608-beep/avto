@@ -352,6 +352,41 @@ def cash_rack(g):
 
 
 # ---------------------------------------------------------------- будівля
+# ---------------------------------------------------------------- компоненти
+# Кожен тип обладнання будується один раз (визначення компонента), а всі одиниці цього типу
+# є його копіями — як описано в п. 2.3 курсової («зміна одного екземпляра змінює всі копії»).
+DEF_TITLES = {
+    'wall_hill': 'Пристінна гірка для взуття 1250×600×2200', 'island_hill': 'Острівна двостороння гірка 1500×1200×1400',
+    'kids_table': 'Низький стіл-гірка для дитячого взуття 1200×600×700', 'podium': 'Подіум для промо-викладки 1600×800×400',
+    'glass_vitrine': 'Скляна вітрина для аксесуарів 1000×500×1900', 'bag_counter': 'Острівна вітрина-прилавок для сумок 1200×1200×1100',
+    'spinner': 'Обертова стійка для шкарпеток і панчіх 600×600×1600', 'care_stand': 'Стійка для засобів догляду 600×400×1400',
+    'banquette': 'Банкетка для приміряння 1200×450×450', 'mirror': 'Підлогове дзеркало 600×300×1700',
+    'cash_table': 'Касовий стіл 1600×700×1000', 'cash_rack': 'Стелаж касової зони 1200×400×2000',
+}
+DEFS = {}          # ключ -> (назва визначення, локальна геометрія)
+INSTANCES = []     # (ключ, назва копії, тег, tx, ty, кут)
+
+
+def place(name, tag, x0, y0, w, d, facing, builder, *args):
+    rot = {'-y': 0, '+x': 90, '+y': 180, '-x': 270}[facing]
+    key = (builder.__name__,) + args
+    if key not in DEFS:
+        title = DEF_TITLES[builder.__name__] + (f' — {DEPTS[args[0]][0]}' if args else '')
+        local = bm.Group(title, tag)
+        builder(local, *args)
+        DEFS[key] = local
+    r = bm.Xf(0, 0, 0, rot)
+    cs = [r((0, 0, 0)), r((w, 0, 0)), r((0, d, 0)), r((w, d, 0))]
+    tx, ty = x0 - min(c[0] for c in cs), y0 - min(c[1] for c in cs)
+    xf = bm.Xf(0, 0, 0, rot).then(bm.Xf(tx, ty, 0))
+    g = new_group(name, tag)                     # розгорнута копія — для DAE і рендерів
+    for k, polys in DEFS[key].parts.items():
+        g.parts[k] = [([xf(p) for p in pts], [r(n) for n in ns] if ns else None) for pts, ns in polys]
+    g.instance = True
+    INSTANCES.append((key, name, tag, tx, ty, rot))
+    return g
+
+
 def floor_tiles(g, x0, y0, x1, y1):
     import math
     for i in range(int(math.floor(x0)), int(math.ceil(x1))):
@@ -494,12 +529,206 @@ def build_navigation():
 
 SCENES_RB = '''    scene(model, 'Загальний вигляд', [-7.0, -12.0, 17.0], [10.0, 9.5, 0.0])
     scene(model, 'Вигляд від входу', [9.0, 0.6, 1.65], [9.0, 14.0, 0.8])
-    scene(model, 'План зверху', [11.0, 9.25, 38.0], [11.0, 9.26, 0.0])
+    scene(model, 'План зверху', [11.0, 9.25, 38.0], [11.0, 9.25, 0.0], false, 20.5)
     scene(model, 'Жіночий відділ', [12.5, 8.4, 1.8], [3.0, 16.0, 0.8])
     scene(model, 'Чоловічий відділ (виступ)', [16.5, 9.0, 1.9], [21.0, 17.5, 0.8])
     scene(model, 'Каси та дитячий відділ', [10.5, 6.5, 2.4], [3.5, 2.0, 0.6])
     scene(model, 'Аксесуари біля входу', [9.0, 6.5, 2.0], [14.5, 0.5, 0.8])
 '''
+
+
+RB_HELPERS = r"""
+  def self.defn(model, name, parts)
+    d = model.definitions.add(name)
+    parts.each do |mname, smooth, polys|
+      mesh = Geom::PolygonMesh.new
+      polys.each do |flat|
+        pts = []
+        (0...flat.length).step(3) { |i| pts << Geom::Point3d.new(flat[i] * M, flat[i + 1] * M, flat[i + 2] * M) }
+        mesh.add_polygon(pts) rescue nil
+      end
+      d.entities.fill_from_mesh(mesh, true, smooth ? 12 : 0, @m[mname], @m[mname])
+    end
+    d
+  end
+
+  def self.inst(model, d, name, tagname, tx, ty, rot)
+    tr = Geom::Transformation.translation([tx * M, ty * M, 0]) * Geom::Transformation.rotation(ORIGIN, Z_AXIS, rot.degrees)
+    i = model.active_entities.add_instance(d, tr)
+    i.name = name
+    i.layer = tag(model, tagname)
+    i
+  end
+
+  # ---------------- аркуш А1 у LayOut (841 × 594 мм, альбомний)
+  def self.mm(v)
+    v / 25.4
+  end
+
+  def self.lo_style(e)
+    st = e.style
+    yield st
+    e.style = st
+  rescue StandardError
+    nil
+  end
+
+  def self.lo_text(doc, layer, page, str, x, y, size = 12, bold = false)
+    t = Layout::FormattedText.new(str, Geom::Point2d.new(mm(x), mm(y)), Layout::FormattedText::ANCHOR_TYPE_TOP_LEFT)
+    doc.add_entity(t, layer, page)
+    lo_style(t) { |st| st.text_size = size; st.text_bold = bold; st.font_family = 'Times New Roman' }
+    t
+  end
+
+  def self.lo_rect(doc, layer, page, x, y, w, h, fill = nil, stroke = 0.5)
+    r = Layout::Rectangle.new(Geom::Bounds2d.new(mm(x), mm(y), mm(w), mm(h)))
+    doc.add_entity(r, layer, page)
+    lo_style(r) do |st|
+      st.stroke_width = stroke
+      if fill
+        st.solid_filled = true
+        st.fill_color = Sketchup::Color.new(fill)
+      else
+        st.solid_filled = false
+      end
+    end
+    r
+  end
+
+  def self.lo_view(doc, layer, page, skp, scene, x, y, w, h, caption, scale = nil)
+    vp = Layout::SketchUpModel.new(skp, Geom::Bounds2d.new(mm(x), mm(y), mm(w), mm(h)))
+    idx = vp.scenes.index(scene)
+    vp.current_scene = idx if idx
+    begin
+      vp.render_mode = Layout::SketchUpModel::HYBRID_RENDER
+    rescue StandardError
+      nil
+    end
+    if scale
+      begin
+        vp.perspective = false
+        vp.scale = scale
+        vp.preserve_scale_on_resize = true
+      rescue StandardError
+        nil
+      end
+    end
+    doc.add_entity(vp, layer, page)
+    begin
+      vp.render if vp.render_needed?
+    rescue StandardError
+      nil
+    end
+    lo_rect(doc, layer, page, x, y, w, h, nil, 0.35)
+    lo_text(doc, layer, page, caption, x, y + h + 2, 11)
+    vp
+  end
+
+  def self.make_layout(skp, layout_path, pdf_path)
+    begin
+      require 'layout'
+    rescue LoadError
+      nil
+    end
+    doc = Layout::Document.new
+    doc.page_info.width = mm(841)
+    doc.page_info.height = mm(594)
+    page = doc.pages[0]
+    layer = doc.layers[0]
+    lo_rect(doc, layer, page, 20, 5, 816, 584, nil, 1.4)                       # рамка
+    lo_text(doc, layer, page, SHEET_TITLE, 30, 10, 26, true)
+    lo_text(doc, layer, page, SHEET_SUBTITLE, 30, 22, 15)
+    SHEET_VIEWS.each { |sc, x, y, w, h, cap, sca| lo_view(doc, layer, page, skp, sc, x, y, w, h, cap, sca) }
+    # експлікація обладнання
+    tx, ty = 30, 462
+    lo_text(doc, layer, page, 'Експлікація торговельно-технологічного обладнання', tx, ty - 8, 13, true)
+    cols = [[10, '№'], [138, 'Найменування обладнання'], [52, 'Габарити, мм'], [22, 'К-сть']]
+    rh = 7.4
+    ([['№', 'Найменування обладнання', 'Габарити, мм', 'К-сть']] + SHEET_EQUIP).each_with_index do |row, ri|
+      cx = tx
+      cols.each_with_index do |(cw, _), ci|
+        lo_rect(doc, layer, page, cx, ty + ri * rh, cw, rh, ri.zero? ? '#E6E6E6' : nil, 0.3)
+        lo_text(doc, layer, page, row[ci].to_s, cx + 1.5, ty + ri * rh + 1.3, 9, ri.zero?)
+        cx += cw
+      end
+    end
+    # умовні позначення відділів
+    lx, ly = 265, 462
+    lo_text(doc, layer, page, 'Умовні позначення', lx, ly - 8, 13, true)
+    SHEET_LEGEND.each_with_index do |(name, col), i|
+      lo_rect(doc, layer, page, lx, ly + i * 9, 12, 6, col, 0.3)
+      lo_text(doc, layer, page, name, lx + 15, ly + i * 9 + 0.6, 10)
+    end
+    # основний напис (штамп) 185 × 55 мм
+    sx, sy = 651, 534
+    lo_rect(doc, layer, page, sx, sy, 185, 55, nil, 1.0)
+    [11, 22, 33, 44].each { |dy| lo_rect(doc, layer, page, sx, sy + dy, 185, 0.01, nil, 0.3) }
+    SHEET_STAMP.each_with_index do |(txt, size, bold), i|
+      lo_text(doc, layer, page, txt, sx + 3, sy + 2 + i * 11, size, bold)
+    end
+    doc.save(layout_path)
+    puts "Збережено: #{layout_path}"
+    begin
+      doc.export(pdf_path)
+      puts "Збережено: #{pdf_path}"
+    rescue StandardError => e
+      puts "PDF не експортовано (#{e.message}). Відкрийте .layout у LayOut: Файл → Експорт → PDF."
+    end
+  end
+"""
+
+
+def rb_parts(g):
+    out = []
+    for (m, smooth), polys in g.parts.items():
+        out.append(f'      [{bm.rb_str(m)}, {"true" if smooth else "false"}, [\n')
+        for pts, _n in polys:
+            out.append('        [' + ','.join('%.4f,%.4f,%.4f' % p for p in pts) + '],\n')
+        out.append('      ]],\n')
+    return ''.join(out)
+
+
+def rb_val(v):
+    if isinstance(v, str):
+        return bm.rb_str(v)
+    if v is None:
+        return 'nil'
+    if isinstance(v, bool):
+        return 'true' if v else 'false'
+    if isinstance(v, (list, tuple)):
+        return '[' + ', '.join(rb_val(x) for x in v) + ']'
+    return repr(v)
+
+
+SHEET = {
+    'SHEET_TITLE': 'ПРОЄКТ ТОРГОВЕЛЬНОЇ ЗАЛИ МАГАЗИНУ ВЗУТТЯ ТА АКСЕСУАРІВ ТОВ «ВЗУТТЯ»',
+    'SHEET_SUBTITLE': 'Тривимірна модель торговельної зали у SketchUp (п. 2.3, рис. 2.3–2.5). Г-подібна зала 360 м²: 16,0 × 18,5 м + виступ 6,0 × 10,7 м, висота 3,0 м',
+    # сцена, x, y, w, h (мм), підпис, масштаб (лише для ортогонального плану)
+    'SHEET_VIEWS': [
+        ['План зверху', 30, 34, 245, 205, 'План торговельної зали з розміщенням обладнання, М 1:100', 0.01],
+        ['Загальний вигляд', 290, 34, 300, 205, 'Загальний вигляд моделі (рис. 2.3)', None],
+        ['Вигляд від входу', 605, 34, 221, 205, 'Вигляд торговельної зали від входу (рис. 2.5)', None],
+        ['Жіночий відділ', 30, 255, 260, 180, 'Жіночий відділ і зона приміряння', None],
+        ['Чоловічий відділ (виступ)', 300, 255, 260, 180, 'Чоловічий відділ у правому виступі (рис. Б.1)', None],
+        ['Каси та дитячий відділ', 570, 255, 256, 180, 'Розрахунковий вузол і дитячий відділ', None],
+    ],
+    'SHEET_EQUIP': [
+        [1, 'Пристінна гірка для взуття', '1250×600×2200', 45], [2, 'Острівна двостороння гірка', '1500×1200×1400', 15],
+        [3, 'Низький стіл-гірка для дитячого взуття', '1200×600×700', 2], [4, 'Подіум для промо-викладки', '1600×800×400', 3],
+        [5, 'Скляна вітрина для аксесуарів', '1000×500×1900', 4], [6, 'Острівна вітрина-прилавок для сумок', '1200×1200×1100', 2],
+        [7, 'Обертова стійка для шкарпеток і панчіх', '600×600×1600', 3], [8, 'Стійка для засобів догляду за взуттям', '600×400×1400', 1],
+        [9, 'Банкетка для приміряння', '1200×450×450', 7], [10, 'Підлогове дзеркало', '600×300×1700', 7],
+        [11, 'Касовий стіл (робоче місце касира)', '1600×700×1000', 3], [12, 'Стелаж касової зони', '1200×400×2000', 2],
+        ['', 'Разом', '', 94]],
+    'SHEET_LEGEND': [['Жіноче взуття', '#E8A0B4'], ['Чоловіче взуття', '#8DB3E2'], ['Дитяче взуття', '#F4D06F'],
+                     ['Аксесуари і сумки', '#B9A3D9'], ['Супутні товари', '#A8D5A2'], ['Розрахунковий вузол', '#9AA3AD'],
+                     ['Зона приміряння (банкетки, дзеркала)', '#D9D9D9']],
+    'SHEET_STAMP': [['Курсова робота з дисципліни «Проєктування торговельних об’єктів»', 9, False],
+                    ['Магазин взуття та аксесуарів ТОВ «Взуття». Тривимірна модель торговельної зали', 9, True],
+                    ['Розробив(ла): ______________________   Перевірив(ла): ______________________', 9, False],
+                    ['ДТЕУ, кафедра торговельного підприємництва та логістики', 9, False],
+                    ['Аркуш А1 (841 × 594)        Масштаб плану 1:100        Київ 2026', 9, False]],
+}
 
 
 def main():
@@ -508,22 +737,73 @@ def main():
     build_shell()
     build_equipment()
     build_navigation()
-    eq = [g for g in bm.GROUPS if g.name[:1].isdigit()]
-    print(f'Груп: {len(bm.GROUPS)}, одиниць обладнання: {len(eq)}, полігонів: {sum(g.nfaces() for g in bm.GROUPS)}')
+    eq = [g for g in bm.GROUPS if getattr(g, 'instance', False)]
+    print(f'Груп: {len(bm.GROUPS)}, одиниць обладнання: {len(eq)}, визначень компонентів: {len(DEFS)}, '
+          f'полігонів: {sum(g.nfaces() for g in bm.GROUPS)}')
     dae = os.path.join(HERE, 'vzuttia.dae')
     rb = os.path.join(HERE, 'vzuttia.rb')
     bm.export_dae(dae)
     s = open(dae, encoding='utf-8').read()
     s = s.replace('build_model.py — ТОВ «Дитячий світ»', 'build_model.py — ТОВ «Взуття»').replace('name="Дитячий світ"', 'name="Взуття"')
     open(dae, 'w', encoding='utf-8').write(s)
+    # Ruby: будівля і навігація — групами, обладнання — компонентами
+    all_groups = list(bm.GROUPS)
+    bm.GROUPS[:] = [g for g in all_groups if not getattr(g, 'instance', False)]
+    for g in DEFS.values():                         # матеріали визначень мають потрапити до списку
+        bm.GROUPS.append(g)
     bm.export_rb(rb)
+    bm.GROUPS[:] = all_groups
     s = open(rb, encoding='utf-8').read()
+    # прибрати групи-визначення, додані лише заради матеріалів
+    for g in DEFS.values():
+        a = s.index(f"    grp(model, {bm.rb_str(g.name)}, ")
+        b = s.index('    ])\n', a) + len('    ])\n')
+        s = s[:a] + s[b:]
+    comps = ['    # обладнання: визначення компонентів і їхні копії\n', '    defs = {}\n']
+    for i, (key, g) in enumerate(DEFS.items()):
+        comps.append(f'    defs[{i}] = defn(model, {bm.rb_str(g.name)}, [\n{rb_parts(g)}    ])\n')
+    keys = list(DEFS)
+    for key, name, tag, tx, ty, rot in INSTANCES:
+        comps.append(f'    inst(model, defs[{keys.index(key)}], {bm.rb_str(name)}, {bm.rb_str(tag)}, {tx:.4f}, {ty:.4f}, {rot})\n')
     a = s.index("    scene(model, 'Загальний вигляд'")
     b = s.index('    model.pages.selected_page')
-    s = s[:a] + SCENES_RB + s[b:]
+    s = s[:a] + ''.join(comps) + SCENES_RB + s[b:]
+    consts = ''.join(f'  {k} = {rb_val(v)}.freeze\n' for k, v in SHEET.items())
+    s = s.replace('  def self.build\n', consts + RB_HELPERS + '\n  def self.build\n', 1)
+    s = s.replace("""  def self.scene(model, name, eye, target)
+    cam = Sketchup::Camera.new(eye.map { |v| v * M }, target.map { |v| v * M }, Z_AXIS)
+    cam.fov = 50
+""", """  def self.scene(model, name, eye, target, persp = true, height = nil)
+    up = persp ? Z_AXIS : Y_AXIS
+    cam = Sketchup::Camera.new(eye.map { |v| v * M }, target.map { |v| v * M }, up)
+    if persp
+      cam.fov = 50
+    else
+      cam.perspective = false
+      cam.height = height * M
+    end
+""")
+    s = s.replace("""      model.options['UnitsOptions']['LengthUnit'] = 4  # метри""",
+                  """      model.options['UnitsOptions']['LengthUnit'] = 2       # міліметри (п. 2.3)
+      model.options['UnitsOptions']['LengthPrecision'] = 0""")
+    s = s.replace("""    model.commit_operation
+""", """    model.commit_operation
+    dir = File.dirname(__FILE__)
+    skp = File.join(dir, 'vzuttia.skp')
+    model.save(skp)
+    puts "Збережено: #{skp}"
+    begin
+      make_layout(skp, File.join(dir, 'vzuttia_A1.layout'), File.join(dir, 'vzuttia_A1.pdf'))
+    rescue StandardError, LoadError => e
+      puts "Аркуш LayOut не створено: #{e.message}"
+    end
+""", 1)
     s = (s.replace('DytiachyiSvit', 'Vzuttia').replace('магазину ТОВ «Дитячий світ» (курсова робота, розділ 4)',
-                                                         'магазину взуття ТОВ «Взуття» (курсова робота, підрозділ 2.3)')
+                                                       'магазину взуття ТОВ «Взуття» (курсова робота, підрозділ 2.3)')
          .replace('dytiachyi_svit.rb', 'vzuttia.rb').replace('Дитячий світ', 'Взуття'))
+    s = s.replace("# Згенеровано build_model.py; одиниці — метри.",
+                  "# Згенеровано build_model.py. Після побудови скрипт зберігає поруч vzuttia.skp,\n"
+                  "# створює аркуш А1 vzuttia_A1.layout у LayOut і експортує його у vzuttia_A1.pdf.")
     open(rb, 'w', encoding='utf-8').write(s)
 
 
